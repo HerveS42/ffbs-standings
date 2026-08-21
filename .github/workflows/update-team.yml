@@ -1,0 +1,46 @@
+name: Mise à jour du roster et des résultats
+
+on:
+  schedule:
+    # 06h00 heure de Paris (05h00 UTC), une seule fois par jour.
+    - cron: "0 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-team:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Installer les dépendances
+        run: npm install
+
+      - name: Récupérer le roster et les résultats
+        env:
+          SCRAPER_API_KEY: ${{ secrets.SCRAPER_API_KEY }}
+        run: node scripts/scrape-team.js
+
+      - name: Publier les fichiers de debug (HTML brut de la page)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-team-page
+          path: debug/
+          if-no-files-found: ignore
+
+      - name: Publier les fichiers JSON s'ils ont changé
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/roster.json data/results.json
+          git diff --staged --quiet || git commit -m "Mise à jour automatique du roster et des résultats"
+          git push
