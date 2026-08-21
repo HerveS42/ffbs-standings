@@ -1,17 +1,25 @@
 // scrape-standings.js
 //
-// Récupère la page de classement FFBS/WBSC, repère le tableau des
-// résultats, et écrit un fichier JSON exploitable (data/standings.json).
+// Récupère la page de classement FFBS/WBSC via un navigateur headless
+// (Playwright), repère le tableau des résultats, et écrit un fichier
+// JSON exploitable (data/standings.json).
 //
-// Le script est volontairement "générique" : il ne cible pas des
-// classes CSS précises (qui peuvent changer sans prévenir) mais
-// cherche le plus grand tableau HTML de la page, en supposant que
-// la première ligne contient les en-têtes de colonnes.
+// Pourquoi un navigateur headless et pas une simple requête HTTP ?
+// Le site FFBS/WBSC bloque les requêtes qui ne ressemblent pas à un
+// vrai visiteur (protection anti-robot, erreur "403 Forbidden").
+// Playwright ouvre une page comme le ferait Chrome, ce qui contourne
+// ce blocage.
+//
+// Le script reste "générique" : il ne cible pas des classes CSS
+// précises (qui peuvent changer sans prévenir) mais cherche le plus
+// grand tableau HTML de la page, en supposant que la première ligne
+// contient les en-têtes de colonnes.
 //
 // Si le site change de structure (ex: classement affiché autrement
 // qu'avec une balise <table>), il faudra adapter la fonction
 // extractStandingsTable().
 
+import { chromium } from "playwright";
 import * as cheerio from "cheerio";
 import { writeFile, mkdir } from "node:fs/promises";
 import path from "node:path";
@@ -21,30 +29,35 @@ const SOURCE_URL =
 
 const OUTPUT_PATH = path.join(process.cwd(), "data", "standings.json");
 
-async function fetchHtml(url) {
-  const response = await fetch(url, {
-    headers: {
-      // Certains sites bloquent les requêtes sans en-tête "navigateur".
-      "User-Agent":
+async function fetchHtmlViaBrowser(url) {
+  const browser = await chromium.launch();
+  try {
+    const context = await browser.newContext({
+      userAgent:
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0 Safari/537.36",
-      "Accept-Language": "fr-FR,fr;q=0.9",
-    },
-  });
+      locale: "fr-FR",
+    });
+    const page = await context.newPage();
 
-  if (!response.ok) {
-    throw new Error(
-      `Échec du chargement de la page (${response.status} ${response.statusText})`
-    );
+    await page.goto(url, { waitUntil: "networkidle", timeout: 30000 });
+
+    // On attend qu'au moins un tableau soit présent sur la page
+    // (le classement est probablement chargé dynamiquement en JS).
+    await page.waitForSelector("table", { timeout: 15000 }).catch(() => {
+      // Si aucun tableau n'apparaît, on continue quand même : le
+      // message d'erreur plus bas sera plus clair pour diagnostiquer.
+    });
+
+    return await page.content();
+  } finally {
+    await browser.close();
   }
-
-  return response.text();
 }
 
 function extractStandingsTable(html) {
+  // On réutilise cheerio pour parser le HTML final (après exécution JS).
   const $ = cheerio.load(html);
 
-  // On récupère tous les tableaux de la page et on garde le plus
-  // "riche" (le plus de lignes) : c'est en général le classement.
   let bestTable = null;
   let bestRowCount = 0;
 
@@ -67,7 +80,6 @@ function extractStandingsTable(html) {
     throw new Error("Tableau trouvé mais il ne contient pas assez de lignes.");
   }
 
-  // Première ligne = en-têtes de colonnes
   const headers = $(rows[0])
     .find("th, td")
     .map((_, cell) => $(cell).text().trim())
@@ -81,7 +93,6 @@ function extractStandingsTable(html) {
 
     const entry = {};
     headers.forEach((header, i) => {
-      // Si l'en-tête est vide (icône, logo...), on nomme la colonne colonne_N
       const key = header || `colonne_${i + 1}`;
       entry[key] = cells[i] ?? "";
     });
@@ -93,7 +104,7 @@ function extractStandingsTable(html) {
 
 async function main() {
   console.log(`Récupération de la page : ${SOURCE_URL}`);
-  const html = await fetchHtml(SOURCE_URL);
+  const html = await fetchHtmlViaBrowser(SOURCE_URL);
 
   const { headers, teams } = extractStandingsTable(html);
 
@@ -114,4 +125,3 @@ main().catch((error) => {
   console.error("Erreur lors de la récupération du classement :", error);
   process.exit(1);
 });
-
