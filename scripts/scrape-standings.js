@@ -24,6 +24,9 @@ import * as cheerio from "cheerio";
 import { writeFile, mkdir } from "node:fs/promises";
 import path from "node:path";
 
+// (les fonctions writeFile/mkdir sont réutilisées à la fois pour le
+// fichier de sortie standings.json et pour les fichiers de debug)
+
 const SOURCE_URL =
   "https://ffbs.wbsc.org/fr/events/2026-championnat-de-france-division-2-baseball/standings";
 
@@ -48,7 +51,15 @@ async function fetchHtmlViaBrowser(url) {
       // message d'erreur plus bas sera plus clair pour diagnostiquer.
     });
 
-    return await page.content();
+    // Mode debug : on sauvegarde systématiquement une capture d'écran
+    // et le HTML complet de la page, pour pouvoir diagnostiquer la
+    // structure réelle si l'extraction échoue.
+    await mkdir("debug", { recursive: true });
+    await page.screenshot({ path: "debug/page.png", fullPage: true });
+    const html = await page.content();
+    await writeFile("debug/page.html", html, "utf-8");
+
+    return html;
   } finally {
     await browser.close();
   }
