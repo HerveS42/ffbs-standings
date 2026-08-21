@@ -28,6 +28,9 @@ jobs:
       - name: Installer les dépendances
         run: npm install
 
+      - name: Installer le navigateur Chromium (pour Playwright)
+        run: npx playwright install --with-deps chromium
+
       - name: Récupérer le classement
         run: npm run scrape
 
