@@ -1,0 +1,12 @@
+{
+  "name": "ffbs-standings-scraper",
+  "version": "1.0.0",
+  "description": "Récupère automatiquement le classement FFBS/WBSC et le publie en JSON",
+  "type": "module",
+  "scripts": {
+    "scrape": "node scripts/scrape-standings.js"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0"
+  }
+}
