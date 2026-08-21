@@ -94,10 +94,26 @@ function extractStandingsTable(html) {
     .get();
 
   const teams = rows.slice(1).map((row) => {
-    const cells = $(row)
+    let cells = $(row)
       .find("th, td")
-      .map((_, cell) => $(cell).text().trim())
+      .map((_, cell) => $(cell).text().replace(/\s+/g, " ").trim())
       .get();
+
+    // Certaines lignes du tableau contiennent une cellule "cachée"
+    // sans équivalent dans l'en-tête (ex: une colonne logo d'équipe,
+    // sans texte). Si on a plus de cellules que d'en-têtes, on
+    // retire la première cellule vide en trop pour réaligner les
+    // colonnes correctement.
+    while (cells.length > headers.length) {
+      const emptyIndex = cells.findIndex((cell) => cell === "");
+      if (emptyIndex === -1) {
+        // Aucune cellule vide identifiable : on tronque la fin par
+        // sécurité plutôt que de mal aligner toute la ligne.
+        cells = cells.slice(0, headers.length);
+        break;
+      }
+      cells.splice(emptyIndex, 1);
+    }
 
     const entry = {};
     headers.forEach((header, i) => {
