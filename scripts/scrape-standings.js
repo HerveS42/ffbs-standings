@@ -1,72 +1,69 @@
 // scrape-standings.js
 //
-// Récupère la page de classement FFBS/WBSC via un navigateur headless
-// (Playwright), repère le tableau des résultats, et écrit un fichier
-// JSON exploitable (data/standings.json).
+// Récupère la page de classement FFBS/WBSC (via ScraperAPI, qui
+// contourne la protection CloudFront/WAF du site en passant par une
+// adresse IP "normale"), repère le tableau des résultats, et écrit
+// un fichier JSON exploitable (data/standings.json).
 //
-// Pourquoi un navigateur headless et pas une simple requête HTTP ?
-// Le site FFBS/WBSC bloque les requêtes qui ne ressemblent pas à un
-// vrai visiteur (protection anti-robot, erreur "403 Forbidden").
-// Playwright ouvre une page comme le ferait Chrome, ce qui contourne
-// ce blocage.
+// Pourquoi ScraperAPI et pas une requête directe ?
+// Le site FFBS/WBSC bloque toutes les requêtes provenant d'adresses
+// IP de datacenter (dont celles de GitHub Actions), quel que soit le
+// navigateur utilisé. ScraperAPI route la requête via des IP
+// résidentielles/non bloquées et gère l'affichage complet de la page
+// (y compris le JavaScript) à notre place.
 //
-// Le script reste "générique" : il ne cible pas des classes CSS
-// précises (qui peuvent changer sans prévenir) mais cherche le plus
-// grand tableau HTML de la page, en supposant que la première ligne
-// contient les en-têtes de colonnes.
+// La clé API est lue depuis la variable d'environnement
+// SCRAPER_API_KEY (configurée comme "secret" GitHub, jamais écrite
+// en clair dans ce fichier).
+//
+// Le script reste "générique" pour l'extraction : il ne cible pas
+// des classes CSS précises (qui peuvent changer sans prévenir) mais
+// cherche le plus grand tableau HTML de la page, en supposant que la
+// première ligne contient les en-têtes de colonnes.
 //
 // Si le site change de structure (ex: classement affiché autrement
 // qu'avec une balise <table>), il faudra adapter la fonction
-// extractStandingsTable().
+// extractStandingsTable() — les fichiers de debug (capture d'écran +
+// HTML) générés à chaque exécution en échec aident à diagnostiquer.
 
-import { chromium } from "playwright";
 import * as cheerio from "cheerio";
 import { writeFile, mkdir } from "node:fs/promises";
 import path from "node:path";
-
-// (les fonctions writeFile/mkdir sont réutilisées à la fois pour le
-// fichier de sortie standings.json et pour les fichiers de debug)
 
 const SOURCE_URL =
   "https://ffbs.wbsc.org/fr/events/2026-championnat-de-france-division-2-baseball/standings";
 
 const OUTPUT_PATH = path.join(process.cwd(), "data", "standings.json");
 
-async function fetchHtmlViaBrowser(url) {
-  const browser = await chromium.launch();
-  try {
-    const context = await browser.newContext({
-      userAgent:
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0 Safari/537.36",
-      locale: "fr-FR",
-    });
-    const page = await context.newPage();
+const SCRAPER_API_KEY = process.env.SCRAPER_API_KEY;
 
-    await page.goto(url, { waitUntil: "networkidle", timeout: 30000 });
-
-    // On attend qu'au moins un tableau soit présent sur la page
-    // (le classement est probablement chargé dynamiquement en JS).
-    await page.waitForSelector("table", { timeout: 15000 }).catch(() => {
-      // Si aucun tableau n'apparaît, on continue quand même : le
-      // message d'erreur plus bas sera plus clair pour diagnostiquer.
-    });
-
-    // Mode debug : on sauvegarde systématiquement une capture d'écran
-    // et le HTML complet de la page, pour pouvoir diagnostiquer la
-    // structure réelle si l'extraction échoue.
-    await mkdir("debug", { recursive: true });
-    await page.screenshot({ path: "debug/page.png", fullPage: true });
-    const html = await page.content();
-    await writeFile("debug/page.html", html, "utf-8");
-
-    return html;
-  } finally {
-    await browser.close();
+async function fetchHtmlViaScraperApi(url) {
+  if (!SCRAPER_API_KEY) {
+    throw new Error(
+      "La variable d'environnement SCRAPER_API_KEY n'est pas définie. Vérifie qu'elle est bien configurée dans les secrets GitHub Actions."
+    );
   }
+
+  const apiUrl = new URL("https://api.scraperapi.com/");
+  apiUrl.searchParams.set("api_key", SCRAPER_API_KEY);
+  apiUrl.searchParams.set("url", url);
+  // render=true : ScraperAPI exécute le JavaScript de la page avant
+  // de nous renvoyer le HTML final (nécessaire si le classement est
+  // chargé dynamiquement).
+  apiUrl.searchParams.set("render", "true");
+
+  const response = await fetch(apiUrl.toString());
+
+  if (!response.ok) {
+    throw new Error(
+      `Échec du chargement de la page via ScraperAPI (${response.status} ${response.statusText})`
+    );
+  }
+
+  return response.text();
 }
 
 function extractStandingsTable(html) {
-  // On réutilise cheerio pour parser le HTML final (après exécution JS).
   const $ = cheerio.load(html);
 
   let bestTable = null;
@@ -82,7 +79,7 @@ function extractStandingsTable(html) {
 
   if (!bestTable) {
     throw new Error(
-      "Aucun tableau trouvé sur la page. La structure du site a peut-être changé — vérifie manuellement l'URL source."
+      "Aucun tableau trouvé sur la page. La structure du site a peut-être changé — vérifie le fichier de debug (debug/page.html) pour diagnostiquer."
     );
   }
 
@@ -113,9 +110,18 @@ function extractStandingsTable(html) {
   return { headers, teams };
 }
 
+async function saveDebugFiles(html) {
+  await mkdir("debug", { recursive: true });
+  await writeFile("debug/page.html", html, "utf-8");
+}
+
 async function main() {
   console.log(`Récupération de la page : ${SOURCE_URL}`);
-  const html = await fetchHtmlViaBrowser(SOURCE_URL);
+  const html = await fetchHtmlViaScraperApi(SOURCE_URL);
+
+  // On sauvegarde toujours le HTML brut reçu, pratique pour
+  // diagnostiquer si l'extraction échoue.
+  await saveDebugFiles(html);
 
   const { headers, teams } = extractStandingsTable(html);
 
