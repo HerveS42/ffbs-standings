@@ -1,6 +1,6 @@
 {
   "source": "https://ffbs.wbsc.org/fr/events/2026-championnat-de-france-division-2-baseball/standings",
-  "updatedAt": "2026-08-21T09:15:40.184Z",
+  "updatedAt": "2026-08-21T09:21:59.997Z",
   "headers": [
     "#",
     "Equipe",
@@ -13,7 +13,7 @@
   "teams": [
     {
       "#": "1",
-      "Equipe": "MET Metz Cometz",
+      "Equipe": "Metz Cometz",
       "W": "15",
       "L": "3",
       "T": "0",
@@ -22,7 +22,7 @@
     },
     {
       "#": "2",
-      "Equipe": "NIC Nice Cavigal",
+      "Equipe": "Nice Cavigal",
       "W": "15",
       "L": "3",
       "T": "0",
@@ -31,7 +31,7 @@
     },
     {
       "#": "3",
-      "Equipe": "MON Montigny-le-Bretonneux Cougars",
+      "Equipe": "Montigny-le-Bretonneux Cougars",
       "W": "12",
       "L": "6",
       "T": "0",
@@ -40,7 +40,7 @@
     },
     {
       "#": "4",
-      "Equipe": "MDC Meyzieu-Décines Cards",
+      "Equipe": "Meyzieu-Décines Cards",
       "W": "11",
       "L": "7",
       "T": "0",
@@ -49,7 +49,7 @@
     },
     {
       "#": "5",
-      "Equipe": "BRE Bréal-sous-Montfort Black Panthers",
+      "Equipe": "Bréal-sous-Montfort Black Panthers",
       "W": "9",
       "L": "9",
       "T": "0",
@@ -58,7 +58,7 @@
     },
     {
       "#": "6",
-      "Equipe": "CLF Clermont-Ferrand Arvernes",
+      "Equipe": "Clermont-Ferrand Arvernes",
       "W": "8",
       "L": "10",
       "T": "0",
@@ -67,7 +67,7 @@
     },
     {
       "#": "7",
-      "Equipe": "ROU Rouen 2 Huskies",
+      "Equipe": "Rouen 2 Huskies",
       "W": "6",
       "L": "12",
       "T": "0",
@@ -76,7 +76,7 @@
     },
     {
       "#": "8",
-      "Equipe": "VAL Valenciennes Vipères",
+      "Equipe": "Valenciennes Vipères",
       "W": "5",
       "L": "13",
       "T": "0",
@@ -85,7 +85,7 @@
     },
     {
       "#": "9",
-      "Equipe": "MTP Montpellier 2 Barracudas",
+      "Equipe": "Montpellier 2 Barracudas",
       "W": "5",
       "L": "13",
       "T": "0",
@@ -94,7 +94,7 @@
     },
     {
       "#": "10",
-      "Equipe": "ERM Ermont Expos",
+      "Equipe": "Ermont Expos",
       "W": "4",
       "L": "14",
       "T": "0",
