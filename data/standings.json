@@ -1,6 +1,6 @@
 {
   "source": "https://ffbs.wbsc.org/fr/events/2026-championnat-de-france-division-2-baseball/standings",
-  "updatedAt": "2026-08-21T08:58:47.701Z",
+  "updatedAt": "2026-08-21T09:15:40.184Z",
   "headers": [
     "#",
     "Equipe",
@@ -13,93 +13,93 @@
   "teams": [
     {
       "#": "1",
-      "Equipe": "",
-      "W": "MET\n                        Metz Cometz",
-      "L": "15",
-      "T": "3",
-      "PCT": "0",
-      "GB": ".833"
+      "Equipe": "MET Metz Cometz",
+      "W": "15",
+      "L": "3",
+      "T": "0",
+      "PCT": ".833",
+      "GB": "0"
     },
     {
       "#": "2",
-      "Equipe": "",
-      "W": "NIC\n                        Nice Cavigal",
-      "L": "15",
-      "T": "3",
-      "PCT": "0",
-      "GB": ".833"
+      "Equipe": "NIC Nice Cavigal",
+      "W": "15",
+      "L": "3",
+      "T": "0",
+      "PCT": ".833",
+      "GB": "0"
     },
     {
       "#": "3",
-      "Equipe": "",
-      "W": "MON\n                        Montigny-le-Bretonneux Cougars",
-      "L": "12",
-      "T": "6",
-      "PCT": "0",
-      "GB": ".667"
+      "Equipe": "MON Montigny-le-Bretonneux Cougars",
+      "W": "12",
+      "L": "6",
+      "T": "0",
+      "PCT": ".667",
+      "GB": "3"
     },
     {
       "#": "4",
-      "Equipe": "",
-      "W": "MDC\n                        Meyzieu-Décines Cards",
-      "L": "11",
-      "T": "7",
-      "PCT": "0",
-      "GB": ".611"
+      "Equipe": "MDC Meyzieu-Décines Cards",
+      "W": "11",
+      "L": "7",
+      "T": "0",
+      "PCT": ".611",
+      "GB": "4"
     },
     {
       "#": "5",
-      "Equipe": "",
-      "W": "BRE\n                        Bréal-sous-Montfort Black Panthers",
+      "Equipe": "BRE Bréal-sous-Montfort Black Panthers",
+      "W": "9",
       "L": "9",
-      "T": "9",
-      "PCT": "0",
-      "GB": ".500"
+      "T": "0",
+      "PCT": ".500",
+      "GB": "6"
     },
     {
       "#": "6",
-      "Equipe": "",
-      "W": "CLF\n                        Clermont-Ferrand Arvernes",
-      "L": "8",
-      "T": "10",
-      "PCT": "0",
-      "GB": ".444"
+      "Equipe": "CLF Clermont-Ferrand Arvernes",
+      "W": "8",
+      "L": "10",
+      "T": "0",
+      "PCT": ".444",
+      "GB": "7"
     },
     {
       "#": "7",
-      "Equipe": "",
-      "W": "ROU\n                        Rouen 2 Huskies",
-      "L": "6",
-      "T": "12",
-      "PCT": "0",
-      "GB": ".333"
+      "Equipe": "ROU Rouen 2 Huskies",
+      "W": "6",
+      "L": "12",
+      "T": "0",
+      "PCT": ".333",
+      "GB": "9"
     },
     {
       "#": "8",
-      "Equipe": "",
-      "W": "VAL\n                        Valenciennes Vipères",
-      "L": "5",
-      "T": "13",
-      "PCT": "0",
-      "GB": ".278"
+      "Equipe": "VAL Valenciennes Vipères",
+      "W": "5",
+      "L": "13",
+      "T": "0",
+      "PCT": ".278",
+      "GB": "10"
     },
     {
       "#": "9",
-      "Equipe": "",
-      "W": "MTP\n                        Montpellier 2 Barracudas",
-      "L": "5",
-      "T": "13",
-      "PCT": "0",
-      "GB": ".278"
+      "Equipe": "MTP Montpellier 2 Barracudas",
+      "W": "5",
+      "L": "13",
+      "T": "0",
+      "PCT": ".278",
+      "GB": "10"
     },
     {
       "#": "10",
-      "Equipe": "",
-      "W": "ERM\n                        Ermont Expos",
-      "L": "4",
-      "T": "14",
-      "PCT": "0",
-      "GB": ".222"
+      "Equipe": "ERM Ermont Expos",
+      "W": "4",
+      "L": "14",
+      "T": "0",
+      "PCT": ".222",
+      "GB": "11"
     }
   ]
 }
