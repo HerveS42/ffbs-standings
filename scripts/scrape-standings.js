@@ -118,7 +118,16 @@ function extractStandingsTable(html) {
     const entry = {};
     headers.forEach((header, i) => {
       const key = header || `colonne_${i + 1}`;
-      entry[key] = cells[i] ?? "";
+      let value = cells[i] ?? "";
+
+      // La colonne "Equipe" contient le code d'équipe (ex: "MET")
+      // suivi du nom complet (ex: "Metz Cometz"). On retire ce code
+      // pour ne garder que le nom.
+      if (key === "Equipe") {
+        value = value.replace(/^[A-ZÀ-Ý0-9]{2,5}\s+/, "");
+      }
+
+      entry[key] = value;
     });
     return entry;
   });
