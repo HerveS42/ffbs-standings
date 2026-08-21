@@ -1,0 +1,105 @@
+{
+  "source": "https://ffbs.wbsc.org/fr/events/2026-championnat-de-france-division-2-baseball/standings",
+  "updatedAt": "2026-08-21T08:58:47.701Z",
+  "headers": [
+    "#",
+    "Equipe",
+    "W",
+    "L",
+    "T",
+    "PCT",
+    "GB"
+  ],
+  "teams": [
+    {
+      "#": "1",
+      "Equipe": "",
+      "W": "MET\n                        Metz Cometz",
+      "L": "15",
+      "T": "3",
+      "PCT": "0",
+      "GB": ".833"
+    },
+    {
+      "#": "2",
+      "Equipe": "",
+      "W": "NIC\n                        Nice Cavigal",
+      "L": "15",
+      "T": "3",
+      "PCT": "0",
+      "GB": ".833"
+    },
+    {
+      "#": "3",
+      "Equipe": "",
+      "W": "MON\n                        Montigny-le-Bretonneux Cougars",
+      "L": "12",
+      "T": "6",
+      "PCT": "0",
+      "GB": ".667"
+    },
+    {
+      "#": "4",
+      "Equipe": "",
+      "W": "MDC\n                        Meyzieu-Décines Cards",
+      "L": "11",
+      "T": "7",
+      "PCT": "0",
+      "GB": ".611"
+    },
+    {
+      "#": "5",
+      "Equipe": "",
+      "W": "BRE\n                        Bréal-sous-Montfort Black Panthers",
+      "L": "9",
+      "T": "9",
+      "PCT": "0",
+      "GB": ".500"
+    },
+    {
+      "#": "6",
+      "Equipe": "",
+      "W": "CLF\n                        Clermont-Ferrand Arvernes",
+      "L": "8",
+      "T": "10",
+      "PCT": "0",
+      "GB": ".444"
+    },
+    {
+      "#": "7",
+      "Equipe": "",
+      "W": "ROU\n                        Rouen 2 Huskies",
+      "L": "6",
+      "T": "12",
+      "PCT": "0",
+      "GB": ".333"
+    },
+    {
+      "#": "8",
+      "Equipe": "",
+      "W": "VAL\n                        Valenciennes Vipères",
+      "L": "5",
+      "T": "13",
+      "PCT": "0",
+      "GB": ".278"
+    },
+    {
+      "#": "9",
+      "Equipe": "",
+      "W": "MTP\n                        Montpellier 2 Barracudas",
+      "L": "5",
+      "T": "13",
+      "PCT": "0",
+      "GB": ".278"
+    },
+    {
+      "#": "10",
+      "Equipe": "",
+      "W": "ERM\n                        Ermont Expos",
+      "L": "4",
+      "T": "14",
+      "PCT": "0",
+      "GB": ".222"
+    }
+  ]
+}
