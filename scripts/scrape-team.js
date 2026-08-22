@@ -1,10 +1,17 @@
 // scrape-team.js
 //
-// Récupère la page d'une équipe FFBS/WBSC (roster + résultats des
-// rencontres), identifie automatiquement quel tableau est le roster
-// et lequel est les résultats (grâce à des mots-clés dans les
-// en-têtes de colonnes), et écrit deux fichiers JSON séparés :
-// data/roster.json et data/results.json.
+// Récupère la page d'une équipe FFBS/WBSC. Cette page contient trois
+// tableaux : le roster des joueurs, les entraîneurs, et les
+// résultats des rencontres. Le script identifie automatiquement
+// chaque tableau (grâce à des mots-clés dans les en-têtes de
+// colonnes) et écrit deux fichiers JSON :
+//   - data/roster.json   → { players: {...}, coaches: {...} }
+//   - data/results.json  → { headers, entries }
+//
+// Joueurs et entraîneurs sont regroupés dans le même fichier
+// roster.json (deux sections distinctes) car ils s'affichent sur la
+// même page côté site : le roster, avec les entraîneurs juste en
+// dessous.
 //
 // Même logique que scrape-standings.js : passage par ScraperAPI pour
 // contourner la protection CloudFront/WAF du site, une seule requête
@@ -25,33 +32,33 @@ const RESULTS_OUTPUT_PATH = path.join(process.cwd(), "data", "results.json");
 
 const SCRAPER_API_KEY = process.env.SCRAPER_API_KEY;
 
-// Mots-clés (en minuscules, sans accents) utilisés pour deviner quel
-// tableau correspond au roster et lequel correspond aux résultats.
-// Si la détection automatique se trompe, il suffit d'ajuster ces
-// listes.
-const ROSTER_KEYWORDS = [
-  "nom",
-  "poste",
-  "position",
-  "taille",
-  "poids",
-  "naissance",
-  "numero",
-  "bat",
-  "lance",
-  "joueur",
-];
-
-const RESULTS_KEYWORDS = [
-  "date",
-  "adversaire",
-  "score",
-  "lieu",
-  "resultat",
-  "domicile",
-  "exterieur",
-  "match",
-];
+// Mots-clés (en minuscules, sans accents) utilisés pour deviner à
+// quelle catégorie appartient chaque tableau de la page. Si la
+// détection automatique se trompe, il suffit d'ajuster ces listes.
+const KEYWORD_SETS = {
+  players: [
+    "poste",
+    "position",
+    "taille",
+    "poids",
+    "naissance",
+    "numero",
+    "bat",
+    "lance",
+    "joueur",
+  ],
+  coaches: ["entraineur", "coach", "role", "fonction", "staff"],
+  results: [
+    "date",
+    "adversaire",
+    "score",
+    "lieu",
+    "resultat",
+    "domicile",
+    "exterieur",
+    "match",
+  ],
+};
 
 function normalize(text) {
   return text
@@ -129,7 +136,51 @@ function scoreHeadersAgainstKeywords(headers, keywords) {
   );
 }
 
-function extractRosterAndResults(html) {
+// Associe chaque tableau candidat à la catégorie (players / coaches /
+// results) pour laquelle il obtient le meilleur score, sans jamais
+// assigner deux catégories différentes au même tableau ni la même
+// catégorie à deux tableaux différents.
+function assignTablesToCategories(candidates) {
+  const categories = Object.keys(KEYWORD_SETS);
+
+  const scores = candidates.map((candidate) => {
+    const perCategory = {};
+    for (const category of categories) {
+      perCategory[category] = scoreHeadersAgainstKeywords(
+        candidate.headers,
+        KEYWORD_SETS[category]
+      );
+    }
+    return perCategory;
+  });
+
+  const assignment = {};
+  const usedTableIndexes = new Set();
+
+  for (const category of categories) {
+    let bestIndex = -1;
+    let bestScore = 0; // en dessous de 1, on considère qu'il n'y a pas de correspondance
+
+    candidates.forEach((_, index) => {
+      if (usedTableIndexes.has(index)) return;
+      if (scores[index][category] > bestScore) {
+        bestScore = scores[index][category];
+        bestIndex = index;
+      }
+    });
+
+    if (bestIndex !== -1) {
+      assignment[category] = candidates[bestIndex];
+      usedTableIndexes.add(bestIndex);
+    } else {
+      assignment[category] = null;
+    }
+  }
+
+  return assignment;
+}
+
+function extractAllTables(html) {
   const $ = cheerio.load(html);
   const tables = $("table").toArray();
 
@@ -139,41 +190,11 @@ function extractRosterAndResults(html) {
     );
   }
 
-  // On extrait toutes les tables, puis on classe chacune selon son
-  // score de correspondance avec les mots-clés roster / résultats.
   const candidates = tables
     .map((table) => extractTableData($, table))
     .filter((data) => data !== null);
 
-  let bestRoster = null;
-  let bestRosterScore = -1;
-  let bestResults = null;
-  let bestResultsScore = -1;
-
-  for (const candidate of candidates) {
-    const rosterScore = scoreHeadersAgainstKeywords(
-      candidate.headers,
-      ROSTER_KEYWORDS
-    );
-    const resultsScore = scoreHeadersAgainstKeywords(
-      candidate.headers,
-      RESULTS_KEYWORDS
-    );
-
-    if (rosterScore > bestRosterScore) {
-      bestRosterScore = rosterScore;
-      bestRoster = candidate;
-    }
-    if (resultsScore > bestResultsScore) {
-      bestResultsScore = resultsScore;
-      bestResults = candidate;
-    }
-  }
-
-  return {
-    roster: bestRosterScore > 0 ? bestRoster : null,
-    results: bestResultsScore > 0 ? bestResults : null,
-  };
+  return assignTablesToCategories(candidates);
 }
 
 async function saveDebugFile(html) {
@@ -181,12 +202,43 @@ async function saveDebugFile(html) {
   await writeFile("debug/team-page.html", html, "utf-8");
 }
 
-async function writeJsonOutput(outputPath, table, sourceUrl) {
-  await mkdir(path.dirname(outputPath), { recursive: true });
+async function writeRosterOutput(players, coaches, sourceUrl) {
+  await mkdir(path.dirname(ROSTER_OUTPUT_PATH), { recursive: true });
 
-  if (!table) {
+  const output = {
+    source: sourceUrl,
+    updatedAt: new Date().toISOString(),
+    players: players
+      ? { headers: players.headers, entries: players.entries }
+      : { headers: [], entries: [] },
+    coaches: coaches
+      ? { headers: coaches.headers, entries: coaches.entries }
+      : { headers: [], entries: [] },
+  };
+
+  if (!players) {
+    console.warn("Aucune correspondance trouvée pour le roster des joueurs.");
+  }
+  if (!coaches) {
+    console.warn("Aucune correspondance trouvée pour les entraîneurs.");
+  }
+
+  await writeFile(
+    ROSTER_OUTPUT_PATH,
+    JSON.stringify(output, null, 2),
+    "utf-8"
+  );
+  console.log(
+    `Écrit dans ${ROSTER_OUTPUT_PATH} (${output.players.entries.length} joueurs, ${output.coaches.entries.length} entraîneurs)`
+  );
+}
+
+async function writeResultsOutput(results, sourceUrl) {
+  await mkdir(path.dirname(RESULTS_OUTPUT_PATH), { recursive: true });
+
+  if (!results) {
     console.warn(
-      `Aucune correspondance trouvée pour ${outputPath} — fichier non mis à jour.`
+      "Aucune correspondance trouvée pour les résultats — fichier non mis à jour."
     );
     return;
   }
@@ -194,12 +246,18 @@ async function writeJsonOutput(outputPath, table, sourceUrl) {
   const output = {
     source: sourceUrl,
     updatedAt: new Date().toISOString(),
-    headers: table.headers,
-    entries: table.entries,
+    headers: results.headers,
+    entries: results.entries,
   };
 
-  await writeFile(outputPath, JSON.stringify(output, null, 2), "utf-8");
-  console.log(`Écrit dans ${outputPath} (${table.entries.length} lignes)`);
+  await writeFile(
+    RESULTS_OUTPUT_PATH,
+    JSON.stringify(output, null, 2),
+    "utf-8"
+  );
+  console.log(
+    `Écrit dans ${RESULTS_OUTPUT_PATH} (${results.entries.length} rencontres)`
+  );
 }
 
 async function main() {
@@ -208,10 +266,10 @@ async function main() {
 
   await saveDebugFile(html);
 
-  const { roster, results } = extractRosterAndResults(html);
+  const { players, coaches, results } = extractAllTables(html);
 
-  await writeJsonOutput(ROSTER_OUTPUT_PATH, roster, SOURCE_URL);
-  await writeJsonOutput(RESULTS_OUTPUT_PATH, results, SOURCE_URL);
+  await writeRosterOutput(players, coaches, SOURCE_URL);
+  await writeResultsOutput(results, SOURCE_URL);
 }
 
 main().catch((error) => {
