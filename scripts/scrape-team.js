@@ -32,10 +32,19 @@ const RESULTS_OUTPUT_PATH = path.join(process.cwd(), "data", "results.json");
 
 const SCRAPER_API_KEY = process.env.SCRAPER_API_KEY;
 
-// Mots-clés (en minuscules, sans accents) utilisés pour deviner à
-// quelle catégorie appartient chaque tableau de la page. Si la
-// détection automatique se trompe, il suffit d'ajuster ces listes.
-const KEYWORD_SETS = {
+// Mots-clés (en minuscules, sans accents) recherchés dans les titres
+// de section qui précèdent chaque tableau sur la page (ex: "Roster",
+// "Entraîneurs", "Rencontres"). C'est la méthode principale de
+// détection, plus fiable que les en-têtes de colonnes.
+const HEADING_KEYWORD_SETS = {
+  players: ["roster"],
+  coaches: ["entraineur", "coach"],
+  results: ["rencontre", "match", "resultat"],
+};
+
+// Mots-clés de repli, recherchés dans les en-têtes de colonnes si
+// aucun titre de section n'a pu être associé à un tableau.
+const COLUMN_KEYWORD_SETS = {
   players: [
     "poste",
     "position",
@@ -136,20 +145,66 @@ function scoreHeadersAgainstKeywords(headers, keywords) {
   );
 }
 
+function scoreTextAgainstKeywords(text, keywords) {
+  const normalizedText = normalize(text);
+  return keywords.reduce(
+    (score, keyword) => score + (normalizedText.includes(keyword) ? 1 : 0),
+    0
+  );
+}
+
+// Parcourt le document dans l'ordre et associe à chaque <table> le
+// titre de section le plus proche qui le précède (ex: un <h2>, un
+// <h3>, ou tout élément de titre contenant "Roster", "Entraîneurs",
+// "Rencontres"...).
+function findPrecedingHeadingForEachTable($) {
+  const relevantSelector =
+    "h1, h2, h3, h4, h5, h6, strong, b, legend, caption, table";
+  const elements = $(relevantSelector).toArray();
+
+  const tableToHeading = new Map();
+  let currentHeadingText = "";
+
+  for (const el of elements) {
+    if (el.tagName === "table") {
+      tableToHeading.set(el, currentHeadingText);
+    } else {
+      const text = $(el).text().trim();
+      // On ignore les textes vides ou très longs (probablement pas
+      // un vrai titre de section).
+      if (text && text.length < 60) {
+        currentHeadingText = text;
+      }
+    }
+  }
+
+  return tableToHeading;
+}
+
 // Associe chaque tableau candidat à la catégorie (players / coaches /
 // results) pour laquelle il obtient le meilleur score, sans jamais
 // assigner deux catégories différentes au même tableau ni la même
-// catégorie à deux tableaux différents.
-function assignTablesToCategories(candidates) {
-  const categories = Object.keys(KEYWORD_SETS);
+// catégorie à deux tableaux différents. On priorise le titre de
+// section précédent (plus fiable), et on se rabat sur les en-têtes
+// de colonnes si aucun titre ne correspond.
+function assignTablesToCategories(candidates, headingsByTable) {
+  const categories = Object.keys(HEADING_KEYWORD_SETS);
 
-  const scores = candidates.map((candidate) => {
+  const scores = candidates.map(({ table, data }) => {
+    const headingText = headingsByTable.get(table) || "";
     const perCategory = {};
     for (const category of categories) {
-      perCategory[category] = scoreHeadersAgainstKeywords(
-        candidate.headers,
-        KEYWORD_SETS[category]
+      const headingScore = scoreTextAgainstKeywords(
+        headingText,
+        HEADING_KEYWORD_SETS[category]
       );
+      const columnScore = scoreHeadersAgainstKeywords(
+        data.headers,
+        COLUMN_KEYWORD_SETS[category]
+      );
+      // Un titre de section qui correspond compte beaucoup plus
+      // qu'une simple correspondance de colonne.
+      perCategory[category] = headingScore * 10 + columnScore;
     }
     return perCategory;
   });
@@ -170,7 +225,7 @@ function assignTablesToCategories(candidates) {
     });
 
     if (bestIndex !== -1) {
-      assignment[category] = candidates[bestIndex];
+      assignment[category] = candidates[bestIndex].data;
       usedTableIndexes.add(bestIndex);
     } else {
       assignment[category] = null;
@@ -190,11 +245,13 @@ function extractAllTables(html) {
     );
   }
 
-  const candidates = tables
-    .map((table) => extractTableData($, table))
-    .filter((data) => data !== null);
+  const headingsByTable = findPrecedingHeadingForEachTable($);
 
-  return assignTablesToCategories(candidates);
+  const candidates = tables
+    .map((table) => ({ table, data: extractTableData($, table) }))
+    .filter(({ data }) => data !== null);
+
+  return assignTablesToCategories(candidates, headingsByTable);
 }
 
 async function saveDebugFile(html) {
