@@ -41,6 +41,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/roster.json data/results.json
+          git add data/roster.json 2>/dev/null || true
+          git add data/results.json 2>/dev/null || true
           git diff --staged --quiet || git commit -m "Mise à jour automatique du roster et des résultats"
           git push
