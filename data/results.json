@@ -1,0 +1,204 @@
+{
+  "source": "https://ffbs.wbsc.org/fr/events/2026-championnat-de-france-division-2-baseball/teams/40182",
+  "updatedAt": "2026-08-22T13:36:16.493Z",
+  "headers": [
+    "Date",
+    "Match",
+    "Visiteurs",
+    "Score visiteurs",
+    "Recevant",
+    "Score recevant",
+    "Lien"
+  ],
+  "entries": [
+    {
+      "Date": "12/04/2026",
+      "Match": "#1 D20101",
+      "Visiteurs": "MTP",
+      "Score visiteurs": "0",
+      "Recevant": "MDC",
+      "Score recevant": "10",
+      "Lien": "https://ffbs.wbsc.org/fr/events/2026-championnat-de-france-division-2-baseball/schedule-and-results/box-score/182898"
+    },
+    {
+      "Date": "12/04/2026",
+      "Match": "#2 D20102",
+      "Visiteurs": "MDC",
+      "Score visiteurs": "11",
+      "Recevant": "MTP",
+      "Score recevant": "1",
+      "Lien": "https://ffbs.wbsc.org/fr/events/2026-championnat-de-france-division-2-baseball/schedule-and-results/box-score/182899"
+    },
+    {
+      "Date": "19/04/2026",
+      "Match": "#11 D20201",
+      "Visiteurs": "MDC",
+      "Score visiteurs": "1",
+      "Recevant": "ROU",
+      "Score recevant": "4",
+      "Lien": "https://ffbs.wbsc.org/fr/events/2026-championnat-de-france-division-2-baseball/schedule-and-results/box-score/182911"
+    },
+    {
+      "Date": "19/04/2026",
+      "Match": "#12 D20202",
+      "Visiteurs": "ROU",
+      "Score visiteurs": "2",
+      "Recevant": "MDC",
+      "Score recevant": "9",
+      "Lien": "https://ffbs.wbsc.org/fr/events/2026-championnat-de-france-division-2-baseball/schedule-and-results/box-score/182912"
+    },
+    {
+      "Date": "03/05/2026",
+      "Match": "#21 D20301",
+      "Visiteurs": "NIC",
+      "Score visiteurs": "1",
+      "Recevant": "MDC",
+      "Score recevant": "7",
+      "Lien": "https://ffbs.wbsc.org/fr/events/2026-championnat-de-france-division-2-baseball/schedule-and-results/box-score/182921"
+    },
+    {
+      "Date": "03/05/2026",
+      "Match": "#22 D20302",
+      "Visiteurs": "MDC",
+      "Score visiteurs": "2",
+      "Recevant": "NIC",
+      "Score recevant": "10",
+      "Lien": "https://ffbs.wbsc.org/fr/events/2026-championnat-de-france-division-2-baseball/schedule-and-results/box-score/182922"
+    },
+    {
+      "Date": "10/05/2026",
+      "Match": "#35 D20405",
+      "Visiteurs": "MDC",
+      "Score visiteurs": "1",
+      "Recevant": "MON",
+      "Score recevant": "11",
+      "Lien": "https://ffbs.wbsc.org/fr/events/2026-championnat-de-france-division-2-baseball/schedule-and-results/box-score/182935"
+    },
+    {
+      "Date": "10/05/2026",
+      "Match": "#36 D20406",
+      "Visiteurs": "MON",
+      "Score visiteurs": "11",
+      "Recevant": "MDC",
+      "Score recevant": "9",
+      "Lien": "https://ffbs.wbsc.org/fr/events/2026-championnat-de-france-division-2-baseball/schedule-and-results/box-score/182936"
+    },
+    {
+      "Date": "24/05/2026",
+      "Match": "#43 D20503",
+      "Visiteurs": "CLF",
+      "Score visiteurs": "1",
+      "Recevant": "MDC",
+      "Score recevant": "17",
+      "Lien": "https://ffbs.wbsc.org/fr/events/2026-championnat-de-france-division-2-baseball/schedule-and-results/box-score/182943"
+    },
+    {
+      "Date": "24/05/2026",
+      "Match": "#44 D20504",
+      "Visiteurs": "MDC",
+      "Score visiteurs": "2",
+      "Recevant": "CLF",
+      "Score recevant": "3",
+      "Lien": "https://ffbs.wbsc.org/fr/events/2026-championnat-de-france-division-2-baseball/schedule-and-results/box-score/182944"
+    },
+    {
+      "Date": "31/05/2026",
+      "Match": "#51 D20601",
+      "Visiteurs": "MET",
+      "Score visiteurs": "9",
+      "Recevant": "MDC",
+      "Score recevant": "0",
+      "Lien": "https://ffbs.wbsc.org/fr/events/2026-championnat-de-france-division-2-baseball/schedule-and-results/box-score/182953"
+    },
+    {
+      "Date": "31/05/2026",
+      "Match": "#52 D20602",
+      "Visiteurs": "MDC",
+      "Score visiteurs": "5",
+      "Recevant": "MET",
+      "Score recevant": "3",
+      "Lien": "https://ffbs.wbsc.org/fr/events/2026-championnat-de-france-division-2-baseball/schedule-and-results/box-score/182954"
+    },
+    {
+      "Date": "14/06/2026",
+      "Match": "#63 D20703",
+      "Visiteurs": "MDC",
+      "Score visiteurs": "22",
+      "Recevant": "ERM",
+      "Score recevant": "4",
+      "Lien": "https://ffbs.wbsc.org/fr/events/2026-championnat-de-france-division-2-baseball/schedule-and-results/box-score/182965"
+    },
+    {
+      "Date": "14/06/2026",
+      "Match": "#64 D20704",
+      "Visiteurs": "ERM",
+      "Score visiteurs": "12",
+      "Recevant": "MDC",
+      "Score recevant": "6",
+      "Lien": "https://ffbs.wbsc.org/fr/events/2026-championnat-de-france-division-2-baseball/schedule-and-results/box-score/182966"
+    },
+    {
+      "Date": "21/06/2026",
+      "Match": "#79 D20809",
+      "Visiteurs": "MDC",
+      "Score visiteurs": "7",
+      "Recevant": "BRE",
+      "Score recevant": "3",
+      "Lien": "https://ffbs.wbsc.org/fr/events/2026-championnat-de-france-division-2-baseball/schedule-and-results/box-score/182981"
+    },
+    {
+      "Date": "05/07/2026",
+      "Match": "#83 D20903",
+      "Visiteurs": "VAL",
+      "Score visiteurs": "1",
+      "Recevant": "MDC",
+      "Score recevant": "10",
+      "Lien": "https://ffbs.wbsc.org/fr/events/2026-championnat-de-france-division-2-baseball/schedule-and-results/box-score/182985"
+    },
+    {
+      "Date": "05/07/2026",
+      "Match": "#84 D20904",
+      "Visiteurs": "MDC",
+      "Score visiteurs": "10",
+      "Recevant": "VAL",
+      "Score recevant": "5",
+      "Lien": "https://ffbs.wbsc.org/fr/events/2026-championnat-de-france-division-2-baseball/schedule-and-results/box-score/182986"
+    },
+    {
+      "Date": "19/07/2026",
+      "Match": "#80 A",
+      "Visiteurs": "BRE",
+      "Score visiteurs": "2",
+      "Recevant": "MDC",
+      "Score recevant": "4",
+      "Lien": "https://ffbs.wbsc.org/fr/events/2026-championnat-de-france-division-2-baseball/schedule-and-results/box-score/182982"
+    },
+    {
+      "Date": "29/08/2026",
+      "Match": "#91 PFD201",
+      "Visiteurs": "MDC",
+      "Score visiteurs": "0",
+      "Recevant": "MET",
+      "Score recevant": "0",
+      "Lien": "#"
+    },
+    {
+      "Date": "30/08/2026",
+      "Match": "#92 PFD202",
+      "Visiteurs": "MET",
+      "Score visiteurs": "0",
+      "Recevant": "MDC",
+      "Score recevant": "0",
+      "Lien": "#"
+    },
+    {
+      "Date": "30/08/2026",
+      "Match": "#93 PFD203",
+      "Visiteurs": "MDC",
+      "Score visiteurs": "0",
+      "Recevant": "MET",
+      "Score recevant": "0",
+      "Lien": "#"
+    }
+  ]
+}

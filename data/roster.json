@@ -1,6 +1,6 @@
 {
   "source": "https://ffbs.wbsc.org/fr/events/2026-championnat-de-france-division-2-baseball/teams/40182",
-  "updatedAt": "2026-08-22T13:15:39.337Z",
+  "updatedAt": "2026-08-22T13:36:16.491Z",
   "players": {
     "headers": [
       "#",
@@ -216,7 +216,27 @@
     ]
   },
   "coaches": {
-    "headers": [],
-    "entries": []
+    "headers": [
+      "#",
+      "Nom",
+      "POS"
+    ],
+    "entries": [
+      {
+        "#": "-",
+        "Nom": "LEVEQUE Christophe",
+        "POS": "Manager"
+      },
+      {
+        "#": "-",
+        "Nom": "BERRY RIVERA Gilberto",
+        "POS": "Entraineur"
+      },
+      {
+        "#": "-",
+        "Nom": "LAVERGNE Marc-Antoine",
+        "POS": "Entraineur"
+      }
+    ]
   }
 }
