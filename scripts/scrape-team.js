@@ -1,10 +1,12 @@
 // scrape-team.js
 //
-// Récupère la page d'une équipe FFBS/WBSC. Cette page contient trois
-// tableaux : le roster des joueurs, les entraîneurs, et les
-// résultats des rencontres. Le script identifie automatiquement
-// chaque tableau (grâce à des mots-clés dans les en-têtes de
-// colonnes) et écrit deux fichiers JSON :
+// Récupère la page d'une équipe FFBS/WBSC. Cette page contient :
+//   - un tableau <table> "Roster" (joueurs)
+//   - un tableau <table> "Entraineurs"
+//   - une liste de blocs <div class="game-row"> "Rencontres" (PAS un
+//     tableau HTML, structure différente à extraire spécifiquement)
+//
+// Le script écrit deux fichiers JSON :
 //   - data/roster.json   → { players: {...}, coaches: {...} }
 //   - data/results.json  → { headers, entries }
 //
@@ -34,12 +36,11 @@ const SCRAPER_API_KEY = process.env.SCRAPER_API_KEY;
 
 // Mots-clés (en minuscules, sans accents) recherchés dans les titres
 // de section qui précèdent chaque tableau sur la page (ex: "Roster",
-// "Entraîneurs", "Rencontres"). C'est la méthode principale de
-// détection, plus fiable que les en-têtes de colonnes.
+// "Entraîneurs"). C'est la méthode principale de détection, plus
+// fiable que les en-têtes de colonnes.
 const HEADING_KEYWORD_SETS = {
   players: ["roster"],
   coaches: ["entraineur", "coach"],
-  results: ["rencontre", "match", "resultat"],
 };
 
 // Mots-clés de repli, recherchés dans les en-têtes de colonnes si
@@ -57,16 +58,6 @@ const COLUMN_KEYWORD_SETS = {
     "joueur",
   ],
   coaches: ["entraineur", "coach", "role", "fonction", "staff"],
-  results: [
-    "date",
-    "adversaire",
-    "score",
-    "lieu",
-    "resultat",
-    "domicile",
-    "exterieur",
-    "match",
-  ],
 };
 
 function normalize(text) {
@@ -99,6 +90,8 @@ async function fetchHtmlViaScraperApi(url) {
   return response.text();
 }
 
+// --- Extraction du roster et des entraîneurs (tableaux <table>) ---
+
 function extractTableData($, table) {
   const rows = $(table).find("tr").toArray();
   if (rows.length < 2) return null;
@@ -114,9 +107,6 @@ function extractTableData($, table) {
       .map((_, cell) => $(cell).text().replace(/\s+/g, " ").trim())
       .get();
 
-    // Réalignement en cas de cellule vide en trop (ex: colonne
-    // logo/icône sans en-tête correspondant), même logique que pour
-    // le classement.
     while (cells.length > headers.length) {
       const emptyIndex = cells.findIndex((cell) => cell === "");
       if (emptyIndex === -1) {
@@ -154,9 +144,8 @@ function scoreTextAgainstKeywords(text, keywords) {
 }
 
 // Parcourt le document dans l'ordre et associe à chaque <table> le
-// titre de section le plus proche qui le précède (ex: un <h2>, un
-// <h3>, ou tout élément de titre contenant "Roster", "Entraîneurs",
-// "Rencontres"...).
+// titre de section le plus proche qui le précède (ex: un <h3>
+// "Roster", "Entraineurs"...).
 function findPrecedingHeadingForEachTable($) {
   const relevantSelector =
     "h1, h2, h3, h4, h5, h6, strong, b, legend, caption, table";
@@ -170,8 +159,6 @@ function findPrecedingHeadingForEachTable($) {
       tableToHeading.set(el, currentHeadingText);
     } else {
       const text = $(el).text().trim();
-      // On ignore les textes vides ou très longs (probablement pas
-      // un vrai titre de section).
       if (text && text.length < 60) {
         currentHeadingText = text;
       }
@@ -181,12 +168,12 @@ function findPrecedingHeadingForEachTable($) {
   return tableToHeading;
 }
 
-// Associe chaque tableau candidat à la catégorie (players / coaches /
-// results) pour laquelle il obtient le meilleur score, sans jamais
-// assigner deux catégories différentes au même tableau ni la même
-// catégorie à deux tableaux différents. On priorise le titre de
-// section précédent (plus fiable), et on se rabat sur les en-têtes
-// de colonnes si aucun titre ne correspond.
+// Associe chaque tableau candidat à la catégorie (players / coaches)
+// pour laquelle il obtient le meilleur score, sans jamais assigner
+// deux catégories différentes au même tableau ni la même catégorie à
+// deux tableaux différents. On priorise le titre de section précédent
+// (plus fiable), et on se rabat sur les en-têtes de colonnes si aucun
+// titre ne correspond.
 function assignTablesToCategories(candidates, headingsByTable) {
   const categories = Object.keys(HEADING_KEYWORD_SETS);
 
@@ -202,8 +189,6 @@ function assignTablesToCategories(candidates, headingsByTable) {
         data.headers,
         COLUMN_KEYWORD_SETS[category]
       );
-      // Un titre de section qui correspond compte beaucoup plus
-      // qu'une simple correspondance de colonne.
       perCategory[category] = headingScore * 10 + columnScore;
     }
     return perCategory;
@@ -214,7 +199,7 @@ function assignTablesToCategories(candidates, headingsByTable) {
 
   for (const category of categories) {
     let bestIndex = -1;
-    let bestScore = 0; // en dessous de 1, on considère qu'il n'y a pas de correspondance
+    let bestScore = 0;
 
     candidates.forEach((_, index) => {
       if (usedTableIndexes.has(index)) return;
@@ -235,15 +220,9 @@ function assignTablesToCategories(candidates, headingsByTable) {
   return assignment;
 }
 
-function extractAllTables(html) {
-  const $ = cheerio.load(html);
+function extractPlayersAndCoaches($) {
   const tables = $("table").toArray();
-
-  if (tables.length === 0) {
-    throw new Error(
-      "Aucun tableau trouvé sur la page. La structure du site a peut-être changé — vérifie le fichier de debug (debug/team-page.html) pour diagnostiquer."
-    );
-  }
+  if (tables.length === 0) return { players: null, coaches: null };
 
   const headingsByTable = findPrecedingHeadingForEachTable($);
 
@@ -253,6 +232,87 @@ function extractAllTables(html) {
 
   return assignTablesToCategories(candidates, headingsByTable);
 }
+
+// --- Extraction des rencontres (blocs div.game-row, pas un tableau) ---
+
+function extractResults($) {
+  const gameRows = $(".game-row").toArray();
+  if (gameRows.length === 0) return null;
+
+  const entries = gameRows
+    .map((row) => {
+      const $row = $(row);
+
+      const link = $row.find("a").first().attr("href") || "";
+
+      // Les deux blocs "équipe" (visiteurs / recevant), en excluant
+      // le bloc central qui affiche le score (il partage certaines
+      // classes CSS avec les blocs équipe).
+      const teamBlocks = $row
+        .find(".text-center.col-xs-4")
+        .filter((_, el) => !$(el).hasClass("game-score"))
+        .toArray();
+
+      const teams = {};
+      teamBlocks.forEach((block) => {
+        const label = $(block).find(".home-away-label").text().trim();
+        const teamName = $(block).find(".team-name").text().trim();
+        if (label) teams[label] = teamName;
+      });
+
+      // Dans le bloc central : un texte de match (ex: "#1 D20101"),
+      // le score (deux <span> avec des classes commençant par "away"
+      // et "home"), et la date.
+      const scoreBlock = $row.find(".game-score");
+      const scoreParagraphs = scoreBlock
+        .find("p")
+        .map((_, el) => $(el).text().trim())
+        .get();
+      const matchLabel = scoreParagraphs[0] || "";
+      const date = scoreParagraphs[1] || "";
+
+      const awayScore = scoreBlock
+        .find('span[class^="away"]')
+        .first()
+        .text()
+        .trim();
+      const homeScore = scoreBlock
+        .find('span[class^="home"]')
+        .first()
+        .text()
+        .trim();
+
+      return {
+        Date: date,
+        Match: matchLabel,
+        Visiteurs: teams["Visiteurs"] || "",
+        "Score visiteurs": awayScore,
+        Recevant: teams["Recevant"] || "",
+        "Score recevant": homeScore,
+        Lien: link,
+      };
+    })
+    // On ignore les lignes qui n'ont visiblement pas pu être lues
+    // correctement (aucune équipe identifiée).
+    .filter((entry) => entry.Visiteurs || entry.Recevant);
+
+  if (entries.length === 0) return null;
+
+  return {
+    headers: [
+      "Date",
+      "Match",
+      "Visiteurs",
+      "Score visiteurs",
+      "Recevant",
+      "Score recevant",
+      "Lien",
+    ],
+    entries,
+  };
+}
+
+// --- Sauvegarde ---
 
 async function saveDebugFile(html) {
   await mkdir("debug", { recursive: true });
@@ -295,7 +355,7 @@ async function writeResultsOutput(results, sourceUrl) {
 
   if (!results) {
     console.warn(
-      "Aucune correspondance trouvée pour les résultats — fichier non mis à jour."
+      "Aucune rencontre trouvée — fichier results.json non mis à jour."
     );
     return;
   }
@@ -323,7 +383,10 @@ async function main() {
 
   await saveDebugFile(html);
 
-  const { players, coaches, results } = extractAllTables(html);
+  const $ = cheerio.load(html);
+
+  const { players, coaches } = extractPlayersAndCoaches($);
+  const results = extractResults($);
 
   await writeRosterOutput(players, coaches, SOURCE_URL);
   await writeResultsOutput(results, SOURCE_URL);
