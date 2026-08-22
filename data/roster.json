@@ -1,0 +1,222 @@
+{
+  "source": "https://ffbs.wbsc.org/fr/events/2026-championnat-de-france-division-2-baseball/teams/40182",
+  "updatedAt": "2026-08-22T13:15:39.337Z",
+  "players": {
+    "headers": [
+      "#",
+      "Joueur / Joueuse",
+      "POS",
+      "B/T",
+      "YOB"
+    ],
+    "entries": [
+      {
+        "#": "12",
+        "Joueur / Joueuse": "AZEVEDO Sylvain",
+        "POS": "P/OF",
+        "B/T": "R/R",
+        "YOB": "1995"
+      },
+      {
+        "#": "84",
+        "Joueur / Joueuse": "BELLEFIN Amaury",
+        "POS": "P/1B",
+        "B/T": "R/R",
+        "YOB": "2009"
+      },
+      {
+        "#": "11",
+        "Joueur / Joueuse": "BERRY RIVERA Gilberto",
+        "POS": "OF",
+        "B/T": "R/R",
+        "YOB": "1995"
+      },
+      {
+        "#": "7",
+        "Joueur / Joueuse": "BRESSON-LAVIGNE Nicolas",
+        "POS": "OF",
+        "B/T": "R/R",
+        "YOB": "2005"
+      },
+      {
+        "#": "80",
+        "Joueur / Joueuse": "Cohen Timothé",
+        "POS": "C/2B/OF",
+        "B/T": "L/R",
+        "YOB": "2006"
+      },
+      {
+        "#": "22",
+        "Joueur / Joueuse": "CUVILLON Antony",
+        "POS": "P/1B/OF",
+        "B/T": "R/R",
+        "YOB": "2008"
+      },
+      {
+        "#": "55",
+        "Joueur / Joueuse": "DE OLIVEIRA GOMEZ Carlos Eduardo",
+        "POS": "OF",
+        "B/T": "L/R",
+        "YOB": "1989"
+      },
+      {
+        "#": "8",
+        "Joueur / Joueuse": "DELZANT Lancelot",
+        "POS": "1B/OF",
+        "B/T": "R/R",
+        "YOB": "1995"
+      },
+      {
+        "#": "32",
+        "Joueur / Joueuse": "DESCHAMPS Audric",
+        "POS": "C/2B",
+        "B/T": "R/R",
+        "YOB": "2010"
+      },
+      {
+        "#": "21",
+        "Joueur / Joueuse": "DI MURRO Baptiste",
+        "POS": "2B/OF",
+        "B/T": "R/R",
+        "YOB": "2002"
+      },
+      {
+        "#": "38",
+        "Joueur / Joueuse": "DI MURRO Alban",
+        "POS": "P/1B",
+        "B/T": "L/L",
+        "YOB": "2009"
+      },
+      {
+        "#": "95",
+        "Joueur / Joueuse": "DUROUX Thibaut",
+        "POS": "3B/OF",
+        "B/T": "R/R",
+        "YOB": "2007"
+      },
+      {
+        "#": "17",
+        "Joueur / Joueuse": "DYMOWIEZ Jeremy",
+        "POS": "3B",
+        "B/T": "R/R",
+        "YOB": "2002"
+      },
+      {
+        "#": "5",
+        "Joueur / Joueuse": "GAGNON Matéo",
+        "POS": "P/UTL",
+        "B/T": "R/R",
+        "YOB": "2003"
+      },
+      {
+        "#": "34",
+        "Joueur / Joueuse": "GERDY JAQUEMIER Guilhem",
+        "POS": "P/OF",
+        "B/T": "L/R",
+        "YOB": "2009"
+      },
+      {
+        "#": "91",
+        "Joueur / Joueuse": "ISTURIZ Rafaël",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "2003"
+      },
+      {
+        "#": "51",
+        "Joueur / Joueuse": "KARAGHIEUZIAN Alexandre",
+        "POS": "P/OF",
+        "B/T": "R/R",
+        "YOB": "1989"
+      },
+      {
+        "#": "2",
+        "Joueur / Joueuse": "LAVERGNE Marc-Antoine",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "1979"
+      },
+      {
+        "#": "1",
+        "Joueur / Joueuse": "LAVERGNE Martin",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "2007"
+      },
+      {
+        "#": "27",
+        "Joueur / Joueuse": "LEANDRY Mike",
+        "POS": "1B/OF",
+        "B/T": "R/R",
+        "YOB": "1996"
+      },
+      {
+        "#": "20",
+        "Joueur / Joueuse": "LEVEQUE Bastien",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "2000"
+      },
+      {
+        "#": "24",
+        "Joueur / Joueuse": "LEVEQUE Christophe",
+        "POS": "P",
+        "B/T": "R/R",
+        "YOB": "1974"
+      },
+      {
+        "#": "3",
+        "Joueur / Joueuse": "MARTINEZ FLORES José Alberto",
+        "POS": "P/1B",
+        "B/T": "R/R",
+        "YOB": "1983"
+      },
+      {
+        "#": "9",
+        "Joueur / Joueuse": "MAUBERRET Jean-Baptiste",
+        "POS": "1B",
+        "B/T": "R/R",
+        "YOB": "1982"
+      },
+      {
+        "#": "69",
+        "Joueur / Joueuse": "PRISSE Xavier",
+        "POS": "C/2B",
+        "B/T": "R/R",
+        "YOB": "2004"
+      },
+      {
+        "#": "23",
+        "Joueur / Joueuse": "QUERTIER Brieuc",
+        "POS": "P/OF",
+        "B/T": "R/R",
+        "YOB": "1992"
+      },
+      {
+        "#": "59",
+        "Joueur / Joueuse": "RANDY Yoann",
+        "POS": "P/OF",
+        "B/T": "R/R",
+        "YOB": "1984"
+      },
+      {
+        "#": "88",
+        "Joueur / Joueuse": "RIBOT Ludovic",
+        "POS": "P/3B",
+        "B/T": "R/R",
+        "YOB": "2009"
+      },
+      {
+        "#": "6",
+        "Joueur / Joueuse": "SAIDI Rahim",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "1999"
+      }
+    ]
+  },
+  "coaches": {
+    "headers": [],
+    "entries": []
+  }
+}
