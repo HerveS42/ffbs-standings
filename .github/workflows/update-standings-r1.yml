@@ -1,0 +1,48 @@
+name: Mise à jour du classement R1
+
+on:
+  schedule:
+    # 06h00 et 18h00 heure de Paris (UTC+1 ou UTC+2 selon l'heure d'été).
+    # Les horaires ci-dessous sont en UTC : 05h00 et 17h00 UTC.
+    - cron: "0 5 * * *"
+    - cron: "0 17 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-standings-r1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Installer les dépendances
+        run: npm install
+
+      - name: Récupérer le classement R1
+        env:
+          SCRAPER_API_KEY: ${{ secrets.SCRAPER_API_KEY }}
+        run: node scripts/scrape-standings-r1.js
+
+      - name: Publier les fichiers de debug (HTML brut de la page)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-page-r1
+          path: debug/
+          if-no-files-found: ignore
+
+      - name: Publier le fichier JSON s'il a changé
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/standings-r1.json 2>/dev/null || true
+          git diff --staged --quiet || git commit -m "Mise à jour automatique du classement R1"
+          git push
