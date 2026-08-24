@@ -1,23 +1,17 @@
 // scrape-results-r3.js
 //
-// Récupère la page "schedule-and-results" de la Régionale 3 (page à
-// navigation par date, différente de la page équipe utilisée pour
-// la Division 2 et la Régionale 1) et en extrait uniquement les
-// rencontres de l'équipe dont le code est "ALB".
+// Récupère la page "schedule-and-results" de la Régionale 3. Cette
+// page est construite avec Inertia.js : au lieu d'un tableau HTML
+// classique ou de blocs répétés, TOUTES les données de la saison
+// (chaque match, avec équipes, scores, date, identifiant) sont
+// embarquées dans un attribut data-page (au format JSON) sur la
+// balise <div id="app">. C'est une source de données bien plus
+// fiable que du HTML à parser : pas de risque de ne récupérer que
+// les matchs d'une seule date affichée par défaut.
 //
-// Cette page utilise la même structure de blocs <div class="game-row">
-// que la page équipe des autres compétitions (même plateforme WBSC),
-// mais liste TOUTES les équipes de la compétition, réparties par
-// date. On filtre donc après extraction pour ne garder que les
-// matchs impliquant ALB.
-//
-// Important : si la navigation par date charge les rencontres de
-// façon dynamique (une date à la fois, sans tout mettre dans le HTML
-// initial), ce script ne récupérera que ce qui est présent dans le
-// HTML renvoyé par ScraperAPI (render=true, donc après exécution du
-// JavaScript de la page). Si des rencontres manquent, il faudra
-// probablement parcourir plusieurs URLs (une par date) — à ajuster
-// une fois qu'on aura vu le résultat réel.
+// On extrait ce JSON, on lit props.games (liste de tous les matchs
+// de la compétition), puis on filtre pour ne garder que ceux
+// impliquant l'équipe dont le code est "ALB".
 //
 // Même logique que les autres scripts : passage par ScraperAPI pour
 // contourner la protection CloudFront/WAF du site.
@@ -49,7 +43,10 @@ async function fetchHtmlViaScraperApi(url) {
   const apiUrl = new URL("https://api.scraperapi.com/");
   apiUrl.searchParams.set("api_key", SCRAPER_API_KEY);
   apiUrl.searchParams.set("url", url);
-  apiUrl.searchParams.set("render", "true");
+  // Pas besoin de render=true ici : les données qui nous intéressent
+  // sont déjà présentes dans le HTML initial (rendu côté serveur),
+  // pas injectées après coup par du JavaScript.
+  apiUrl.searchParams.set("render", "false");
 
   const response = await fetch(apiUrl.toString());
 
@@ -62,74 +59,71 @@ async function fetchHtmlViaScraperApi(url) {
   return response.text();
 }
 
-// Même logique d'extraction que pour la page équipe (blocs
-// div.game-row), mais sans filtrer par équipe à ce stade — on
-// récupère tous les matchs de la compétition, puis on filtre après.
-function extractAllGames($) {
-  const gameRows = $(".game-row").toArray();
-  if (gameRows.length === 0) return [];
+// Extrait le JSON Inertia embarqué dans l'attribut data-page de
+// <div id="app">. Cheerio décode automatiquement les entités HTML
+// (&quot; etc.) lorsqu'on lit un attribut avec .attr(), donc le
+// texte récupéré est directement du JSON valide.
+function extractInertiaGames(html) {
+  const $ = cheerio.load(html);
+  const dataPageRaw = $("#app").attr("data-page");
 
-  return gameRows
-    .map((row) => {
-      const $row = $(row);
+  if (!dataPageRaw) {
+    throw new Error(
+      "Impossible de trouver l'attribut data-page sur #app. La structure de la page a peut-être changé — vérifie le fichier de debug (debug/results-r3-page.html) pour diagnostiquer."
+    );
+  }
 
-      const link = $row.find("a").first().attr("href") || "";
+  let parsed;
+  try {
+    parsed = JSON.parse(dataPageRaw);
+  } catch (error) {
+    throw new Error(
+      `Le contenu de data-page n'est pas du JSON valide : ${error.message}`
+    );
+  }
 
-      const teamBlocks = $row
-        .find(".text-center.col-xs-4")
-        .filter((_, el) => !$(el).hasClass("game-score"))
-        .toArray();
+  const games = parsed?.props?.games;
+  if (!Array.isArray(games)) {
+    throw new Error(
+      "La structure JSON attendue (props.games) est introuvable — le format de la page a peut-être changé."
+    );
+  }
 
-      const teams = {};
-      teamBlocks.forEach((block) => {
-        const label = $(block).find(".home-away-label").text().trim();
-        const teamName = $(block).find(".team-name").text().trim();
-        if (label) teams[label] = teamName;
-      });
+  return games;
+}
 
-      const scoreBlock = $row.find(".game-score");
-      const scoreParagraphs = scoreBlock
-        .find("p")
-        .map((_, el) => $(el).text().trim())
-        .get();
-      const matchLabel = scoreParagraphs[0] || "";
-      const date = scoreParagraphs[1] || "";
+function formatDate(startDate) {
+  // startDate est au format "YYYY-MM-DD HH:MM:SS" -> on ne garde que
+  // la date, au format DD/MM/YYYY (cohérent avec les autres pages).
+  const datePart = (startDate || "").split(" ")[0];
+  const [year, month, day] = datePart.split("-");
+  if (!year || !month || !day) return startDate || "";
+  return `${day}/${month}/${year}`;
+}
 
-      const awayScore = scoreBlock
-        .find('span[class^="away"]')
-        .first()
-        .text()
-        .trim();
-      const homeScore = scoreBlock
-        .find('span[class^="home"]')
-        .first()
-        .text()
-        .trim();
+function toResultEntry(game, sourceUrl) {
+  const boxScoreUrl = `${sourceUrl}/box-score/${game.id}`;
 
-      // On garde le label anglais/français tel que présent sur la
-      // page (cette compétition étant consultée en anglais, les
-      // labels peuvent être "Visitor"/"Home" au lieu de
-      // "Visiteurs"/"Recevant" — on gère les deux).
-      const visitorTeam = teams["Visiteurs"] || teams["Visitor"] || "";
-      const homeTeam = teams["Recevant"] || teams["Home"] || "";
-
-      return {
-        Date: date,
-        Match: matchLabel,
-        Visiteurs: visitorTeam,
-        "Score visiteurs": awayScore,
-        Recevant: homeTeam,
-        "Score recevant": homeScore,
-        Lien: link,
-      };
-    })
-    .filter((entry) => entry.Visiteurs || entry.Recevant);
+  return {
+    Date: formatDate(game.start_date || game.start),
+    Match: `#${game.gamenumber ?? ""} ${game.gamecode ?? ""}`.trim(),
+    Visiteurs: game.awaylabel || game.awayioc || "",
+    "Score visiteurs":
+      game.awayruns !== undefined && game.awayruns !== null
+        ? String(game.awayruns)
+        : "",
+    Recevant: game.homelabel || game.homeioc || "",
+    "Score recevant":
+      game.homeruns !== undefined && game.homeruns !== null
+        ? String(game.homeruns)
+        : "",
+    Lien: boxScoreUrl,
+  };
 }
 
 function filterByTeam(games, teamCode) {
   return games.filter(
-    (game) =>
-      game.Visiteurs.includes(teamCode) || game.Recevant.includes(teamCode)
+    (game) => game.homeioc === teamCode || game.awayioc === teamCode
   );
 }
 
@@ -179,14 +173,22 @@ async function main() {
 
   await saveDebugFile(html);
 
-  const $ = cheerio.load(html);
-  const allGames = extractAllGames($);
-
-  console.log(`Total de rencontres trouvées sur la page : ${allGames.length}`);
+  const allGames = extractInertiaGames(html);
+  console.log(`Total de rencontres trouvées dans la saison : ${allGames.length}`);
 
   const teamGames = filterByTeam(allGames, TEAM_CODE);
+  console.log(`Rencontres impliquant ${TEAM_CODE} : ${teamGames.length}`);
 
-  await writeResultsOutput(teamGames, SOURCE_URL);
+  // On trie par date pour un affichage chronologique.
+  teamGames.sort((a, b) => {
+    const dateA = a.start_date || a.start || "";
+    const dateB = b.start_date || b.start || "";
+    return dateA.localeCompare(dateB);
+  });
+
+  const entries = teamGames.map((game) => toResultEntry(game, SOURCE_URL));
+
+  await writeResultsOutput(entries, SOURCE_URL);
 }
 
 main().catch((error) => {
