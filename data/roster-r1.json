@@ -1,0 +1,317 @@
+{
+  "source": "https://ffbs.wbsc.org/fr/events/2026-auvergne-rhone-alpes-championnat-r1-baseball/teams/41375",
+  "updatedAt": "2026-08-24T09:02:05.205Z",
+  "players": {
+    "headers": [
+      "#",
+      "Joueur / Joueuse",
+      "POS",
+      "B/T",
+      "YOB"
+    ],
+    "entries": [
+      {
+        "#": "0",
+        "Joueur / Joueuse": "ALVES SAMPAIO Naomi",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "2010"
+      },
+      {
+        "#": "12",
+        "Joueur / Joueuse": "AZEVEDO Sylvain",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "1995"
+      },
+      {
+        "#": "0",
+        "Joueur / Joueuse": "BELLEFIN Amaury",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "2009"
+      },
+      {
+        "#": "0",
+        "Joueur / Joueuse": "BOIDARD Hugo",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "2010"
+      },
+      {
+        "#": "7",
+        "Joueur / Joueuse": "BRESSON-LAVIGNE Nicolas",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "2005"
+      },
+      {
+        "#": "9",
+        "Joueur / Joueuse": "BRUNET Victor",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "2005"
+      },
+      {
+        "#": "0",
+        "Joueur / Joueuse": "CADILLON Hugo",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "2001"
+      },
+      {
+        "#": "0",
+        "Joueur / Joueuse": "CLERC Gabin",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "2002"
+      },
+      {
+        "#": "0",
+        "Joueur / Joueuse": "Cohen Timothé",
+        "POS": "UTL",
+        "B/T": "L/R",
+        "YOB": "2006"
+      },
+      {
+        "#": "44",
+        "Joueur / Joueuse": "CUVILLON Jerome",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "1984"
+      },
+      {
+        "#": "37",
+        "Joueur / Joueuse": "CUVILLON Antony",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "2008"
+      },
+      {
+        "#": "0",
+        "Joueur / Joueuse": "DELZANT Lancelot",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "1995"
+      },
+      {
+        "#": "39",
+        "Joueur / Joueuse": "DESCHAMPS Audric",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "2010"
+      },
+      {
+        "#": "21",
+        "Joueur / Joueuse": "DI MURRO Alban",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "2009"
+      },
+      {
+        "#": "38",
+        "Joueur / Joueuse": "DI MURRO Baptiste",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "2002"
+      },
+      {
+        "#": "0",
+        "Joueur / Joueuse": "DUPUY Vincent",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "1977"
+      },
+      {
+        "#": "0",
+        "Joueur / Joueuse": "DYMOWIEZ Jeremy",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "2002"
+      },
+      {
+        "#": "97",
+        "Joueur / Joueuse": "GAGNON Matéo",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "2003"
+      },
+      {
+        "#": "24",
+        "Joueur / Joueuse": "ISTURIZ Rafaël",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "2003"
+      },
+      {
+        "#": "51",
+        "Joueur / Joueuse": "KARAGHIEUZIAN Alexandre",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "1989"
+      },
+      {
+        "#": "0",
+        "Joueur / Joueuse": "LAGRUE Bertrand",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "1991"
+      },
+      {
+        "#": "0",
+        "Joueur / Joueuse": "LAVERDA Jeanne",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "1971"
+      },
+      {
+        "#": "16",
+        "Joueur / Joueuse": "LEANDRY Mike",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "1996"
+      },
+      {
+        "#": "96",
+        "Joueur / Joueuse": "MARTINEZ FLORES José Alberto",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "1983"
+      },
+      {
+        "#": "41",
+        "Joueur / Joueuse": "MAUBERRET Jean-Baptiste",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "1982"
+      },
+      {
+        "#": "4",
+        "Joueur / Joueuse": "MERMIN Rémy",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "2002"
+      },
+      {
+        "#": "0",
+        "Joueur / Joueuse": "PRISSE Xavier",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "2004"
+      },
+      {
+        "#": "23",
+        "Joueur / Joueuse": "QUERTIER Brieuc",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "1992"
+      },
+      {
+        "#": "58",
+        "Joueur / Joueuse": "RANDY Yoann",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "1984"
+      },
+      {
+        "#": "0",
+        "Joueur / Joueuse": "REROLE Olivier",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "2009"
+      },
+      {
+        "#": "0",
+        "Joueur / Joueuse": "RIBOT Moui Muy",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "1982"
+      },
+      {
+        "#": "57",
+        "Joueur / Joueuse": "RIBOT Ludovic",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "2009"
+      },
+      {
+        "#": "53",
+        "Joueur / Joueuse": "RIBOT Florent",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "1982"
+      },
+      {
+        "#": "0",
+        "Joueur / Joueuse": "SAIDI Ahmed",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "1963"
+      },
+      {
+        "#": "14",
+        "Joueur / Joueuse": "SAIDI Rahim",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "1999"
+      },
+      {
+        "#": "0",
+        "Joueur / Joueuse": "SARAFIAN Harmony",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "1999"
+      },
+      {
+        "#": "0",
+        "Joueur / Joueuse": "SGARBI Fiona",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "2006"
+      },
+      {
+        "#": "0",
+        "Joueur / Joueuse": "TABORIN Charles-Cédric",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "1989"
+      },
+      {
+        "#": "0",
+        "Joueur / Joueuse": "VASSY Eliott",
+        "POS": "UTL",
+        "B/T": "R/R",
+        "YOB": "2005"
+      }
+    ]
+  },
+  "coaches": {
+    "headers": [
+      "#",
+      "Nom",
+      "POS"
+    ],
+    "entries": [
+      {
+        "#": "-",
+        "Nom": "BRESSON-LAVIGNE Nicolas",
+        "POS": "Entraineur"
+      },
+      {
+        "#": "-",
+        "Nom": "KARAGHIEUZIAN Alexandre",
+        "POS": "Entraineur"
+      },
+      {
+        "#": "-",
+        "Nom": "MAUBERRET Jean-Baptiste",
+        "POS": "Entraineur"
+      },
+      {
+        "#": "-",
+        "Nom": "QUERTIER Brieuc",
+        "POS": "Entraineur"
+      }
+    ]
+  }
+}
