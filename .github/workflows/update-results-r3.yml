@@ -1,0 +1,45 @@
+name: Mise à jour des résultats R3
+
+on:
+  schedule:
+    - cron: "0 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-results-r3:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Installer les dépendances
+        run: npm install
+
+      - name: Récupérer les résultats R3 (équipe ALB)
+        env:
+          SCRAPER_API_KEY: ${{ secrets.SCRAPER_API_KEY }}
+        run: node scripts/scrape-results-r3.js
+
+      - name: Publier les fichiers de debug (HTML brut de la page)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-results-r3-page
+          path: debug/
+          if-no-files-found: ignore
+
+      - name: Publier le fichier JSON s'il a changé
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/results-r3.json 2>/dev/null || true
+          git diff --staged --quiet || git commit -m "Mise à jour automatique des résultats R3"
+          git push
