@@ -1,0 +1,60 @@
+{
+  "source": "https://ffbs.wbsc.org/fr/events/2026-auvergne-rhone-alpes-championnat-r1-baseball/standings",
+  "updatedAt": "2026-08-24T09:05:21.472Z",
+  "headers": [
+    "#",
+    "Equipe",
+    "W",
+    "L",
+    "T",
+    "PCT",
+    "GB"
+  ],
+  "teams": [
+    {
+      "#": "1",
+      "Equipe": "Les Dragons",
+      "W": "14",
+      "L": "2",
+      "T": "0",
+      "PCT": ".875",
+      "GB": "0"
+    },
+    {
+      "#": "2",
+      "Equipe": "CRUZILLES",
+      "W": "10",
+      "L": "6",
+      "T": "0",
+      "PCT": ".625",
+      "GB": "4"
+    },
+    {
+      "#": "3",
+      "Equipe": "Meyzieu Cards",
+      "W": "10",
+      "L": "6",
+      "T": "0",
+      "PCT": ".625",
+      "GB": "4"
+    },
+    {
+      "#": "4",
+      "Equipe": "Les Arvernes de Clermont-Ferrand",
+      "W": "3",
+      "L": "13",
+      "T": "0",
+      "PCT": ".188",
+      "GB": "11"
+    },
+    {
+      "#": "5",
+      "Equipe": "Les Grizzlys de Grenoble",
+      "W": "3",
+      "L": "13",
+      "T": "0",
+      "PCT": ".188",
+      "GB": "11"
+    }
+  ]
+}
