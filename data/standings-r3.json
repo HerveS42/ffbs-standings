@@ -1,0 +1,69 @@
+{
+  "source": "https://ffbs.wbsc.org/fr/events/2026-auvergne-rhone-alpes-championnat-r3-baseball-2026/standings",
+  "updatedAt": "2026-08-24T09:45:10.909Z",
+  "headers": [
+    "#",
+    "Equipe",
+    "W",
+    "L",
+    "T",
+    "PCT",
+    "GB"
+  ],
+  "teams": [
+    {
+      "#": "1",
+      "Equipe": "DRAGONS",
+      "W": "16",
+      "L": "2",
+      "T": "0",
+      "PCT": ".889",
+      "GB": "0"
+    },
+    {
+      "#": "2",
+      "Equipe": "BATS - Spiders",
+      "W": "11",
+      "L": "7",
+      "T": "0",
+      "PCT": ".611",
+      "GB": "5"
+    },
+    {
+      "#": "2",
+      "Equipe": "ARVERNES",
+      "W": "11",
+      "L": "7",
+      "T": "0",
+      "PCT": ".611",
+      "GB": "5"
+    },
+    {
+      "#": "4",
+      "Equipe": "VIKINGS - Cards",
+      "W": "9",
+      "L": "9",
+      "T": "0",
+      "PCT": ".500",
+      "GB": "7"
+    },
+    {
+      "#": "5",
+      "Equipe": "WISPS - Cubs",
+      "W": "9",
+      "L": "11",
+      "T": "0",
+      "PCT": ".450",
+      "GB": "8"
+    },
+    {
+      "#": "6",
+      "Equipe": "DUCKS - Sharks",
+      "W": "0",
+      "L": "20",
+      "T": "0",
+      "PCT": ".000",
+      "GB": "17"
+    }
+  ]
+}
