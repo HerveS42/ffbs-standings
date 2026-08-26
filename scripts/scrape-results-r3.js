@@ -31,28 +31,25 @@ const RESULTS_OUTPUT_PATH = path.join(
   "results-r3.json"
 );
 
-const SCRAPER_API_KEY = process.env.SCRAPER_API_KEY;
+const WORKER_URL = process.env.WORKER_URL;
+const WORKER_SECRET = process.env.WORKER_SECRET;
 
-async function fetchHtmlViaScraperApi(url) {
-  if (!SCRAPER_API_KEY) {
+async function fetchHtmlViaWorker(url) {
+  if (!WORKER_URL || !WORKER_SECRET) {
     throw new Error(
-      "La variable d'environnement SCRAPER_API_KEY n'est pas définie. Vérifie qu'elle est bien configurée dans les secrets GitHub Actions."
+      "Les variables d'environnement WORKER_URL et/ou WORKER_SECRET ne sont pas définies. Vérifie qu'elles sont bien configurées dans les secrets GitHub Actions."
     );
   }
 
-  const apiUrl = new URL("https://api.scraperapi.com/");
-  apiUrl.searchParams.set("api_key", SCRAPER_API_KEY);
-  apiUrl.searchParams.set("url", url);
-  // Pas besoin de render=true ici : les données qui nous intéressent
-  // sont déjà présentes dans le HTML initial (rendu côté serveur),
-  // pas injectées après coup par du JavaScript.
-  apiUrl.searchParams.set("render", "false");
+  const relayUrl = new URL(WORKER_URL);
+  relayUrl.searchParams.set("url", url);
+  relayUrl.searchParams.set("key", WORKER_SECRET);
 
-  const response = await fetch(apiUrl.toString());
+  const response = await fetch(relayUrl.toString());
 
   if (!response.ok) {
     throw new Error(
-      `Échec du chargement de la page via ScraperAPI (${response.status} ${response.statusText})`
+      `Échec du chargement de la page via le relais Cloudflare (${response.status} ${response.statusText})`
     );
   }
 
@@ -169,7 +166,7 @@ async function writeResultsOutput(entries, sourceUrl) {
 
 async function main() {
   console.log(`Récupération de la page : ${SOURCE_URL}`);
-  const html = await fetchHtmlViaScraperApi(SOURCE_URL);
+  const html = await fetchHtmlViaWorker(SOURCE_URL);
 
   await saveDebugFile(html);
 
