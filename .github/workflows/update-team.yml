@@ -26,7 +26,8 @@ jobs:
 
       - name: Récupérer le roster et les résultats
         env:
-          SCRAPER_API_KEY: ${{ secrets.SCRAPER_API_KEY }}
+          WORKER_URL: ${{ secrets.WORKER_URL }}
+          WORKER_SECRET: ${{ secrets.WORKER_SECRET }}
         run: node scripts/scrape-team.js
 
       - name: Publier les fichiers de debug (HTML brut de la page)
