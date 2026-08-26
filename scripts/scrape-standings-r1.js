@@ -1,20 +1,27 @@
 // scrape-standings.js
 //
-// Récupère la page de classement FFBS/WBSC (via ScraperAPI, qui
-// contourne la protection CloudFront/WAF du site en passant par une
-// adresse IP "normale"), repère le tableau des résultats, et écrit
-// un fichier JSON exploitable (data/standings.json).
+// Récupère la page de classement FFBS/WBSC via un relais Cloudflare
+// Worker (qui contourne la protection CloudFront/WAF du site en
+// passant par une adresse IP différente de celles de GitHub
+// Actions), repère le tableau des résultats, et écrit un fichier
+// JSON exploitable (data/standings.json).
 //
-// Pourquoi ScraperAPI et pas une requête directe ?
+// Pourquoi un relais Cloudflare Worker et pas une requête directe ?
 // Le site FFBS/WBSC bloque toutes les requêtes provenant d'adresses
-// IP de datacenter (dont celles de GitHub Actions), quel que soit le
-// navigateur utilisé. ScraperAPI route la requête via des IP
-// résidentielles/non bloquées et gère l'affichage complet de la page
-// (y compris le JavaScript) à notre place.
+// IP de datacenter (dont celles de GitHub Actions). Le Worker fait
+// office d'intermédiaire : c'est lui qui va chercher la page, depuis
+// l'infrastructure Cloudflare.
 //
-// La clé API est lue depuis la variable d'environnement
-// SCRAPER_API_KEY (configurée comme "secret" GitHub, jamais écrite
-// en clair dans ce fichier).
+// Attention : contrairement à ScraperAPI (utilisé auparavant), ce
+// relais NE PEUT PAS exécuter de JavaScript — il renvoie le HTML brut
+// tel que le serveur l'envoie initialement. Ça fonctionne pour cette
+// page de classement (les données sont présentes dès le chargement
+// initial), mais si ce n'était pas le cas, il faudrait une autre
+// solution.
+//
+// L'URL du Worker et son secret sont lus depuis les variables
+// d'environnement WORKER_URL et WORKER_SECRET (configurées comme
+// "secrets" GitHub, jamais écrites en clair dans ce fichier).
 //
 // Le script reste "générique" pour l'extraction : il ne cible pas
 // des classes CSS précises (qui peuvent changer sans prévenir) mais
@@ -35,28 +42,25 @@ const SOURCE_URL =
 
 const OUTPUT_PATH = path.join(process.cwd(), "data", "standings-r1.json");
 
-const SCRAPER_API_KEY = process.env.SCRAPER_API_KEY;
+const WORKER_URL = process.env.WORKER_URL;
+const WORKER_SECRET = process.env.WORKER_SECRET;
 
-async function fetchHtmlViaScraperApi(url) {
-  if (!SCRAPER_API_KEY) {
+async function fetchHtmlViaWorker(url) {
+  if (!WORKER_URL || !WORKER_SECRET) {
     throw new Error(
-      "La variable d'environnement SCRAPER_API_KEY n'est pas définie. Vérifie qu'elle est bien configurée dans les secrets GitHub Actions."
+      "Les variables d'environnement WORKER_URL et/ou WORKER_SECRET ne sont pas définies. Vérifie qu'elles sont bien configurées dans les secrets GitHub Actions."
     );
   }
 
-  const apiUrl = new URL("https://api.scraperapi.com/");
-  apiUrl.searchParams.set("api_key", SCRAPER_API_KEY);
-  apiUrl.searchParams.set("url", url);
-  // render=true : ScraperAPI exécute le JavaScript de la page avant
-  // de nous renvoyer le HTML final (nécessaire si le classement est
-  // chargé dynamiquement).
-  apiUrl.searchParams.set("render", "true");
+  const relayUrl = new URL(WORKER_URL);
+  relayUrl.searchParams.set("url", url);
+  relayUrl.searchParams.set("key", WORKER_SECRET);
 
-  const response = await fetch(apiUrl.toString());
+  const response = await fetch(relayUrl.toString());
 
   if (!response.ok) {
     throw new Error(
-      `Échec du chargement de la page via ScraperAPI (${response.status} ${response.statusText})`
+      `Échec du chargement de la page via le relais Cloudflare (${response.status} ${response.statusText})`
     );
   }
 
@@ -142,7 +146,7 @@ async function saveDebugFiles(html) {
 
 async function main() {
   console.log(`Récupération de la page : ${SOURCE_URL}`);
-  const html = await fetchHtmlViaScraperApi(SOURCE_URL);
+  const html = await fetchHtmlViaWorker(SOURCE_URL);
 
   // On sauvegarde toujours le HTML brut reçu, pratique pour
   // diagnostiquer si l'extraction échoue.
