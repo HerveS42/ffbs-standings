@@ -18,11 +18,11 @@ jobs:
       - name: Installer les dépendances
         run: npm install
 
-      - name: Diagnostiquer la page stats
+      - name: Diagnostiquer l'API stats
         env:
           WORKER_URL: ${{ secrets.WORKER_URL }}
           WORKER_SECRET: ${{ secrets.WORKER_SECRET }}
-        run: node scripts/diagnose-stats.js
+        run: node scripts/diagnose-stats-api.js
 
       - name: Publier le HTML brut de la page
         if: always()
