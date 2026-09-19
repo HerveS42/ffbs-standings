@@ -1,6 +1,6 @@
 {
   "source": "https://ffbs.wbsc.org/fr/events/2026-auvergne-rhone-alpes-championnat-r3-baseball-2026/standings",
-  "updatedAt": "2026-09-18T17:01:24.141Z",
+  "updatedAt": "2026-09-19T05:07:48.725Z",
   "headers": [
     "#",
     "Equipe",
@@ -31,21 +31,21 @@
     },
     {
       "#": "3",
-      "Equipe": "ARVERNES",
-      "W": "11",
-      "L": "8",
-      "T": "0",
-      "PCT": ".579",
-      "GB": "5.5"
-    },
-    {
-      "#": "4",
       "Equipe": "VIKINGS - Cards",
-      "W": "10",
+      "W": "11",
       "L": "9",
       "T": "0",
-      "PCT": ".526",
-      "GB": "6.5"
+      "PCT": ".550",
+      "GB": "6"
+    },
+    {
+      "#": "3",
+      "Equipe": "ARVERNES",
+      "W": "11",
+      "L": "9",
+      "T": "0",
+      "PCT": ".550",
+      "GB": "6"
     },
     {
       "#": "5",
