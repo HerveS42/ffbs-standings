@@ -1,0 +1,19 @@
+{
+  "source": "https://ffbs.wbsc.org/api/v1/stats/events/2026-coupe-de-france-baseball-18u/index",
+  "updatedAt": "2026-10-02T13:43:36.137Z",
+  "team": {
+    "id": 45415
+  },
+  "batting": {
+    "headers": [],
+    "entries": []
+  },
+  "pitching": {
+    "headers": [],
+    "entries": []
+  },
+  "fielding": {
+    "headers": [],
+    "entries": []
+  }
+}
