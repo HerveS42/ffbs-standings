@@ -1,0 +1,42 @@
+{
+  "source": "https://ffbs.wbsc.org/fr/events/2026-coupe-de-france-baseball-18u/standings",
+  "updatedAt": "2026-10-02T13:25:55.568Z",
+  "headers": [
+    "#",
+    "Equipe",
+    "W",
+    "L",
+    "T",
+    "PCT",
+    "GB"
+  ],
+  "teams": [
+    {
+      "#": "",
+      "Equipe": "Dunkerque/Ronchin/Valenciennes/Tourcoing",
+      "W": "0",
+      "L": "0",
+      "T": "0",
+      "PCT": "",
+      "GB": "0"
+    },
+    {
+      "#": "",
+      "Equipe": "PUC",
+      "W": "0",
+      "L": "0",
+      "T": "0",
+      "PCT": "",
+      "GB": "0"
+    },
+    {
+      "#": "",
+      "Equipe": "Rouen",
+      "W": "0",
+      "L": "0",
+      "T": "0",
+      "PCT": "",
+      "GB": "0"
+    }
+  ]
+}
