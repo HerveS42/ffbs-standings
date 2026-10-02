@@ -1,0 +1,69 @@
+name: Mise à jour du roster et des résultats U18
+
+on:
+  schedule:
+    - cron: "0 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-team-u18:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Installer les dépendances
+        run: npm install
+
+      - name: Récupérer le roster et les résultats U18
+        env:
+          WORKER_URL: ${{ secrets.WORKER_URL }}
+          WORKER_SECRET: ${{ secrets.WORKER_SECRET }}
+        run: node scripts/scrape-team-u18.js
+
+      - name: Publier les fichiers de debug (HTML brut de la page)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-team-page-u18
+          path: debug/
+          if-no-files-found: ignore
+
+      - name: Publier les fichiers JSON s'ils ont changé
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/roster-u18.json 2>/dev/null || true
+          git add data/results-u18.json 2>/dev/null || true
+
+          if git diff --staged --quiet; then
+            echo "Rien à publier."
+            exit 0
+          fi
+
+          git commit -m "Mise à jour automatique du roster et des résultats U18"
+
+          success=false
+          for attempt in 1 2 3 4 5; do
+            if git push; then
+              echo "Publication réussie."
+              success=true
+              break
+            fi
+            echo "Push refusé (mise à jour concurrente d'un autre workflow) — nouvelle tentative ($attempt/5)..."
+            git pull --rebase origin main
+            sleep $((RANDOM % 10 + 3))
+          done
+
+          if [ "$success" = false ]; then
+            echo "Échec de la publication après plusieurs tentatives."
+            exit 1
+          fi
