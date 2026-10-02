@@ -1,0 +1,144 @@
+{
+  "source": "https://ffbs.wbsc.org/fr/events/2026-coupe-de-france-baseball-18u/teams/45415",
+  "updatedAt": "2026-10-02T13:39:41.966Z",
+  "players": {
+    "headers": [
+      "#",
+      "Joueur / Joueuse",
+      "POS",
+      "B/T",
+      "YOB"
+    ],
+    "entries": [
+      {
+        "#": "4",
+        "Joueur / Joueuse": "AUBIJOUX Maelian",
+        "POS": "IF",
+        "B/T": "R/R",
+        "YOB": "2011"
+      },
+      {
+        "#": "10",
+        "Joueur / Joueuse": "BELLEFIN Amaury",
+        "POS": "1B",
+        "B/T": "L/L",
+        "YOB": "2009"
+      },
+      {
+        "#": "9",
+        "Joueur / Joueuse": "CUVILLON Antony",
+        "POS": "P",
+        "B/T": "R/R",
+        "YOB": "2008"
+      },
+      {
+        "#": "15",
+        "Joueur / Joueuse": "DESCHAMPS Audric",
+        "POS": "C",
+        "B/T": "R/R",
+        "YOB": "2010"
+      },
+      {
+        "#": "13",
+        "Joueur / Joueuse": "DI MURRO Alban",
+        "POS": "OF",
+        "B/T": "L/L",
+        "YOB": "2009"
+      },
+      {
+        "#": "7",
+        "Joueur / Joueuse": "DUCROT Noa",
+        "POS": "OF",
+        "B/T": "R/R",
+        "YOB": "2011"
+      },
+      {
+        "#": "11",
+        "Joueur / Joueuse": "GERDY JAQUEMIER Guilhem",
+        "POS": "UTL",
+        "B/T": "L/R",
+        "YOB": "2009"
+      },
+      {
+        "#": "5",
+        "Joueur / Joueuse": "HEIDELBERGER Quentin",
+        "POS": "C",
+        "B/T": "R/R",
+        "YOB": "2010"
+      },
+      {
+        "#": "14",
+        "Joueur / Joueuse": "HOCHU Eoin",
+        "POS": "OF",
+        "B/T": "R/R",
+        "YOB": "2009"
+      },
+      {
+        "#": "3",
+        "Joueur / Joueuse": "MEZY Evangéline",
+        "POS": "OF",
+        "B/T": "R/R",
+        "YOB": "2010"
+      },
+      {
+        "#": "1",
+        "Joueur / Joueuse": "MIRAND Nathan",
+        "POS": "P",
+        "B/T": "R/R",
+        "YOB": "2009"
+      },
+      {
+        "#": "6",
+        "Joueur / Joueuse": "MOTTIN Gabriel",
+        "POS": "IF",
+        "B/T": "R/R",
+        "YOB": "2011"
+      },
+      {
+        "#": "2",
+        "Joueur / Joueuse": "PELLET Lenny",
+        "POS": "IF",
+        "B/T": "R/R",
+        "YOB": "2009"
+      },
+      {
+        "#": "8",
+        "Joueur / Joueuse": "RIBETTE Armand",
+        "POS": "P",
+        "B/T": "L/L",
+        "YOB": "2011"
+      },
+      {
+        "#": "12",
+        "Joueur / Joueuse": "RIBOT Ludovic",
+        "POS": "3B",
+        "B/T": "R/R",
+        "YOB": "2009"
+      }
+    ]
+  },
+  "coaches": {
+    "headers": [
+      "#",
+      "Nom",
+      "POS"
+    ],
+    "entries": [
+      {
+        "#": "20",
+        "Nom": "LEVEQUE Bastien",
+        "POS": "Manager"
+      },
+      {
+        "#": "38",
+        "Nom": "RAINHO MONTERO Caio",
+        "POS": "Manager"
+      },
+      {
+        "#": "21",
+        "Nom": "DYMOWIEZ Jeremy",
+        "POS": "Entraineur"
+      }
+    ]
+  }
+}
