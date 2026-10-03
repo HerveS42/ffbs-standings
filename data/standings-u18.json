@@ -1,6 +1,6 @@
 {
   "source": "https://ffbs.wbsc.org/fr/events/2026-coupe-de-france-baseball-18u/standings",
-  "updatedAt": "2026-10-03T14:03:06.039Z",
+  "updatedAt": "2026-10-03T14:45:37.939Z",
   "teamPool": "Sud-Est",
   "pools": [
     {
@@ -17,7 +17,7 @@
       "teams": [
         {
           "#": "1",
-          "Equipe": "Rouen",
+          "Equipe": "PUC",
           "W": "1",
           "L": "0",
           "T": "0",
@@ -26,11 +26,11 @@
         },
         {
           "#": "2",
-          "Equipe": "PUC",
-          "W": "0",
-          "L": "0",
+          "Equipe": "Rouen",
+          "W": "1",
+          "L": "1",
           "T": "0",
-          "PCT": ".000",
+          "PCT": ".500",
           "GB": "0.5"
         },
         {
@@ -99,6 +99,15 @@
       "teams": [
         {
           "#": "1",
+          "Equipe": "La Rochelle/Bréal/Eysines",
+          "W": "1",
+          "L": "0",
+          "T": "0",
+          "PCT": "1.000",
+          "GB": "0"
+        },
+        {
+          "#": "1",
           "Equipe": "Toulouse/Léguevin",
           "W": "1",
           "L": "0",
@@ -107,22 +116,13 @@
           "GB": "0"
         },
         {
-          "#": "2",
-          "Equipe": "La Rochelle/Bréal/Eysines",
-          "W": "0",
-          "L": "0",
-          "T": "0",
-          "PCT": ".000",
-          "GB": "0.5"
-        },
-        {
           "#": "3",
           "Equipe": "Montpellier/Montendre/Montigny/Chartres",
           "W": "0",
-          "L": "1",
+          "L": "2",
           "T": "0",
           "PCT": ".000",
-          "GB": "1"
+          "GB": "1.5"
         }
       ]
     },
@@ -140,6 +140,15 @@
       "teams": [
         {
           "#": "1",
+          "Equipe": "Clermont/Meyzieu/Nord Isère",
+          "W": "1",
+          "L": "0",
+          "T": "0",
+          "PCT": "1.000",
+          "GB": "0"
+        },
+        {
+          "#": "1",
           "Equipe": "Marseille",
           "W": "1",
           "L": "0",
@@ -148,22 +157,13 @@
           "GB": "0"
         },
         {
-          "#": "2",
-          "Equipe": "Clermont/Meyzieu/Nord Isère",
-          "W": "0",
-          "L": "0",
-          "T": "0",
-          "PCT": ".000",
-          "GB": "0.5"
-        },
-        {
           "#": "3",
           "Equipe": "Nice",
           "W": "0",
-          "L": "1",
+          "L": "2",
           "T": "0",
           "PCT": ".000",
-          "GB": "1"
+          "GB": "1.5"
         }
       ]
     }
