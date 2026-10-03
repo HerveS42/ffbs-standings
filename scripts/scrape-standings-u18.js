@@ -1,14 +1,18 @@
 // scrape-standings-u18.js
 //
 // Récupère la page de classement FFBS/WBSC (U18) via le relais
-// Cloudflare Worker, repère le tableau des résultats, et écrit un
-// fichier JSON exploitable (data/standings-u18.json).
+// Cloudflare Worker. Contrairement aux autres compétitions (D2, R1,
+// R3) qui n'ont qu'un seul tableau de classement, cette page U18 est
+// divisée en plusieurs POULES (Nord-Ouest, Nord-Est, Sud-Ouest,
+// Sud-Est), chacune avec son propre tableau. On extrait donc TOUS les
+// tableaux de la page, pas seulement le plus grand, en identifiant le
+// nom de chaque poule via le titre de section qui précède son
+// tableau.
 //
-// Même logique que les scripts des autres compétitions (D2, R1, R3) :
-// le relais Worker contourne la protection CloudFront/WAF du site,
-// l'extraction est générique (plus grand tableau trouvé, réalignement
-// des colonnes si une cellule vide en trop est présente, nettoyage du
-// nom d'équipe en retirant le code en début de texte).
+// Notre équipe (Meyzieu/Clermont-Ferrand) évolue dans la poule
+// Sud-Est : on le signale explicitement dans le JSON de sortie
+// (teamPool: "Sud-Est") pour que la page du site puisse la mettre en
+// avant par défaut.
 
 import * as cheerio from "cheerio";
 import { writeFile, mkdir } from "node:fs/promises";
@@ -18,6 +22,9 @@ const SOURCE_URL =
   "https://ffbs.wbsc.org/fr/events/2026-coupe-de-france-baseball-18u/standings";
 
 const OUTPUT_PATH = path.join(process.cwd(), "data", "standings-u18.json");
+
+// Nom (tel qu'affiché sur le site) de la poule de notre équipe.
+const TEAM_POOL_NAME = "Sud-Est";
 
 const WORKER_URL = process.env.WORKER_URL;
 const WORKER_SECRET = process.env.WORKER_SECRET;
@@ -44,30 +51,35 @@ async function fetchHtmlViaWorker(url) {
   return response.text();
 }
 
-function extractStandingsTable(html) {
-  const $ = cheerio.load(html);
+// Repère, pour chaque <table> de la page, le titre de section le plus
+// proche qui le précède (ex: un <h3> "Poule Sud-Est"). Même logique
+// que celle utilisée pour distinguer Roster / Entraîneurs sur les
+// pages équipe.
+function findPrecedingHeadingForEachTable($) {
+  const relevantSelector =
+    "h1, h2, h3, h4, h5, h6, strong, b, legend, caption, table";
+  const elements = $(relevantSelector).toArray();
 
-  let bestTable = null;
-  let bestRowCount = 0;
+  const tableToHeading = new Map();
+  let currentHeadingText = "";
 
-  $("table").each((_, table) => {
-    const rowCount = $(table).find("tr").length;
-    if (rowCount > bestRowCount) {
-      bestRowCount = rowCount;
-      bestTable = table;
+  for (const el of elements) {
+    if (el.tagName === "table") {
+      tableToHeading.set(el, currentHeadingText);
+    } else {
+      const text = $(el).text().trim();
+      if (text && text.length < 60) {
+        currentHeadingText = text;
+      }
     }
-  });
-
-  if (!bestTable) {
-    throw new Error(
-      "Aucun tableau trouvé sur la page. La structure du site a peut-être changé — vérifie le fichier de debug (debug/page-u18.html) pour diagnostiquer."
-    );
   }
 
-  const rows = $(bestTable).find("tr").toArray();
-  if (rows.length < 2) {
-    throw new Error("Tableau trouvé mais il ne contient pas assez de lignes.");
-  }
+  return tableToHeading;
+}
+
+function extractOneTable($, table) {
+  const rows = $(table).find("tr").toArray();
+  if (rows.length < 2) return null;
 
   const headers = $(rows[0])
     .find("th, td")
@@ -106,6 +118,34 @@ function extractStandingsTable(html) {
   return { headers, teams };
 }
 
+function extractAllPools(html) {
+  const $ = cheerio.load(html);
+  const tables = $("table").toArray();
+
+  if (tables.length === 0) {
+    throw new Error(
+      "Aucun tableau trouvé sur la page. La structure du site a peut-être changé — vérifie le fichier de debug (debug/page-u18.html) pour diagnostiquer."
+    );
+  }
+
+  const headingsByTable = findPrecedingHeadingForEachTable($);
+
+  const pools = [];
+  for (const table of tables) {
+    const extracted = extractOneTable($, table);
+    if (!extracted) continue;
+
+    const poolName = headingsByTable.get(table) || `Poule ${pools.length + 1}`;
+    pools.push({
+      name: poolName,
+      headers: extracted.headers,
+      teams: extracted.teams,
+    });
+  }
+
+  return pools;
+}
+
 async function saveDebugFile(html) {
   await mkdir("debug", { recursive: true });
   await writeFile("debug/page-u18.html", html, "utf-8");
@@ -117,19 +157,24 @@ async function main() {
 
   await saveDebugFile(html);
 
-  const { headers, teams } = extractStandingsTable(html);
+  const pools = extractAllPools(html);
+
+  console.log(`${pools.length} poule(s) trouvée(s) :`);
+  pools.forEach((pool) => {
+    console.log(`  - "${pool.name}" (${pool.teams.length} équipes)`);
+  });
 
   const output = {
     source: SOURCE_URL,
     updatedAt: new Date().toISOString(),
-    headers,
-    teams,
+    teamPool: TEAM_POOL_NAME,
+    pools,
   };
 
   await mkdir(path.dirname(OUTPUT_PATH), { recursive: true });
   await writeFile(OUTPUT_PATH, JSON.stringify(output, null, 2), "utf-8");
 
-  console.log(`Classement écrit dans ${OUTPUT_PATH} (${teams.length} équipes)`);
+  console.log(`\nClassement écrit dans ${OUTPUT_PATH}`);
 }
 
 main().catch((error) => {
