@@ -1,6 +1,6 @@
 {
   "source": "https://ffbs.wbsc.org/fr/events/2026-coupe-de-france-baseball-18u/standings",
-  "updatedAt": "2026-10-03T19:42:14.320Z",
+  "updatedAt": "2026-10-04T10:53:07.349Z",
   "teamPool": "Sud-Est",
   "pools": [
     {
@@ -27,20 +27,20 @@
         {
           "#": "2",
           "Equipe": "Rouen",
-          "W": "1",
+          "W": "2",
           "L": "1",
           "T": "0",
-          "PCT": ".500",
-          "GB": "1"
+          "PCT": ".667",
+          "GB": "0.5"
         },
         {
           "#": "3",
           "Equipe": "Dunkerque/Ronchin/Valenciennes/Tourcoing",
           "W": "0",
-          "L": "2",
+          "L": "3",
           "T": "0",
           "PCT": ".000",
-          "GB": "2"
+          "GB": "2.5"
         }
       ]
     },
@@ -68,20 +68,20 @@
         {
           "#": "2",
           "Equipe": "Savigny-sur-Orge",
-          "W": "1",
+          "W": "2",
           "L": "1",
           "T": "0",
-          "PCT": ".500",
-          "GB": "1"
+          "PCT": ".667",
+          "GB": "0.5"
         },
         {
           "#": "3",
           "Equipe": "Sénart/Stade Français/Meaux",
           "W": "0",
-          "L": "2",
+          "L": "3",
           "T": "0",
           "PCT": ".000",
-          "GB": "2"
+          "GB": "2.5"
         }
       ]
     },
@@ -110,19 +110,19 @@
           "#": "2",
           "Equipe": "La Rochelle/Bréal/Eysines",
           "W": "1",
-          "L": "1",
-          "T": "0",
-          "PCT": ".500",
-          "GB": "1"
-        },
-        {
-          "#": "3",
-          "Equipe": "Montpellier/Montendre/Montigny/Chartres",
-          "W": "0",
           "L": "2",
           "T": "0",
-          "PCT": ".000",
-          "GB": "2"
+          "PCT": ".333",
+          "GB": "1.5"
+        },
+        {
+          "#": "2",
+          "Equipe": "Montpellier/Montendre/Montigny/Chartres",
+          "W": "1",
+          "L": "2",
+          "T": "0",
+          "PCT": ".333",
+          "GB": "1.5"
         }
       ]
     },
@@ -150,20 +150,20 @@
         {
           "#": "2",
           "Equipe": "Marseille",
-          "W": "1",
+          "W": "2",
           "L": "1",
           "T": "0",
-          "PCT": ".500",
-          "GB": "1"
+          "PCT": ".667",
+          "GB": "0.5"
         },
         {
           "#": "3",
           "Equipe": "Nice",
           "W": "0",
-          "L": "2",
+          "L": "3",
           "T": "0",
           "PCT": ".000",
-          "GB": "2"
+          "GB": "2.5"
         }
       ]
     }
