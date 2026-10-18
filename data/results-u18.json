@@ -1,6 +1,6 @@
 {
   "source": "https://ffbs.wbsc.org/fr/events/2026-coupe-de-france-baseball-18u/teams/45415",
-  "updatedAt": "2026-10-17T08:56:18.681Z",
+  "updatedAt": "2026-10-18T09:14:39.269Z",
   "headers": [
     "Date",
     "Match",
@@ -42,10 +42,19 @@
       "Date": "17/10/2026",
       "Match": "#22 Demi-Finale",
       "Visiteurs": "CLF",
-      "Score visiteurs": "0",
+      "Score visiteurs": "5",
       "Recevant": "MET",
-      "Score recevant": "0",
-      "Lien": "#"
+      "Score recevant": "15",
+      "Lien": "https://ffbs.wbsc.org/fr/events/2026-coupe-de-france-baseball-18u/schedule-and-results/box-score/208256"
+    },
+    {
+      "Date": "18/10/2026",
+      "Match": "#23 3e place",
+      "Visiteurs": "TOU",
+      "Score visiteurs": "6",
+      "Recevant": "CLF",
+      "Score recevant": "1",
+      "Lien": "https://ffbs.wbsc.org/fr/events/2026-coupe-de-france-baseball-18u/schedule-and-results/box-score/208257"
     }
   ]
 }
